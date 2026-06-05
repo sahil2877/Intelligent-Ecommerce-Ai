@@ -45,8 +45,18 @@ const productSchema = new mongoose.Schema(
     totalReviews: {
         type: Number,
         default: 0
-    }
+    },
+    isFeatured: {
+   type: Boolean,
+   default: false
 },
+
+discountPercentage: {
+   type: Number,
+   default: 0
+}
+},
+
 {
     timestamps: true
 }
