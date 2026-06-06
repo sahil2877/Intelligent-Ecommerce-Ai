@@ -1,4 +1,6 @@
 const Product = require("../models/Product");
+const cloudinary =
+    require("../config/cloudinary");
 
 const createProduct = async (req, res) => {
   try {
@@ -123,6 +125,70 @@ const deleteProduct = async (req, res) => {
     });
   }
 };
+const uploadProductImage = async (
+    req,
+    res
+) => {
+    try {
+
+        const product =
+            await Product.findById(
+                req.params.id
+            );
+
+        if (!product) {
+            return res.status(404).json({
+                message:
+                    "Product not found"
+            });
+        }
+
+        const result =
+            await new Promise(
+                (resolve, reject) => {
+
+                    cloudinary.uploader
+                        .upload_stream(
+                            {
+                                folder:
+                                    "intelligent-ecommerce"
+                            },
+                            (
+                                error,
+                                result
+                            ) => {
+
+                                if (error)
+                                    reject(error);
+
+                                resolve(result);
+                            }
+                        )
+                        .end(req.file.buffer);
+                }
+            );
+
+        product.images.push(
+            result.secure_url
+        );
+
+        await product.save();
+
+        res.status(200).json({
+            success: true,
+            image:
+                result.secure_url
+        });
+
+    } catch (error) {
+
+        res.status(500).json({
+            message:
+                error.message
+        });
+
+    }
+};
 
 module.exports = {
   createProduct,
@@ -130,4 +196,5 @@ module.exports = {
   getSingleProduct,
   updateProduct,
   deleteProduct,
+  uploadProductImage
 };
