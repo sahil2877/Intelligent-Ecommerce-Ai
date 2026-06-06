@@ -10,16 +10,24 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const authRoutes = require("./routes/authRoutes");
-const productRoutes = require("./routes/productRoutes");
+const authRoutes = 
+    require("./routes/authRoutes");
+const productRoutes = 
+    require("./routes/productRoutes");
 const categoryRoutes =
     require("./routes/categoryRoutes");
+const wishlistRoutes =
+    require("./routes/wishlistRoutes");
 
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use(
     "/api/categories",
     categoryRoutes
+);
+app.use(
+    "/api/wishlist",
+    wishlistRoutes
 );
 
 app.get("/", (req, res) => {
