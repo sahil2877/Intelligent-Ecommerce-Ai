@@ -18,6 +18,8 @@ const categoryRoutes =
     require("./routes/categoryRoutes");
 const wishlistRoutes =
     require("./routes/wishlistRoutes");
+const cartRoutes =
+    require("./routes/cartRoutes");    
 
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
@@ -28,6 +30,10 @@ app.use(
 app.use(
     "/api/wishlist",
     wishlistRoutes
+);
+app.use(
+    "/api/cart",
+    cartRoutes
 );
 
 app.get("/", (req, res) => {
