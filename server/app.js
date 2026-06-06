@@ -24,6 +24,8 @@ const orderRoutes =
     require("./routes/orderRoutes");
 const dashboardRoutes =
     require("./routes/dashboardRoutes");
+const reviewRoutes =
+require("./routes/reviewRoutes");    
 
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
@@ -46,6 +48,10 @@ app.use(
 app.use(
     "/api/dashboard",
     dashboardRoutes
+);
+app.use(
+   "/api/reviews",
+   reviewRoutes
 );
 
 app.get("/", (req, res) => {
