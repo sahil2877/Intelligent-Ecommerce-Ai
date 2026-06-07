@@ -4,6 +4,9 @@ import MainLayout from "../layouts/MainLayout";
 
 import Home from "../pages/Home/Home";
 
+import Login from "../pages/Login/Login";
+import Register from "../pages/Register/Register";
+
 import ProductDetails from "../pages/ProductDetails/ProductDetails";
 
 function AppRoutes() {
@@ -14,6 +17,16 @@ function AppRoutes() {
           <Route path="/" element={<Home />} />
 
           <Route path="/products/:id" element={<ProductDetails />} />
+
+          <Route
+  path="/login"
+  element={<Login />}
+/>
+
+<Route
+  path="/register"
+  element={<Register />}
+/>
         </Routes>
       </MainLayout>
     </BrowserRouter>

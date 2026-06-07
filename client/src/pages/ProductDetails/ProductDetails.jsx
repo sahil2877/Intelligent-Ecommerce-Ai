@@ -1,86 +1,100 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import api from "../../api/axios";
+import { toast } from "react-hot-toast";
 
 function ProductDetails() {
-
   const { id } = useParams();
 
-  const [product, setProduct] =
-    useState(null);
+  const [product, setProduct] = useState(null);
 
-  const [loading, setLoading] =
-    useState(true);
+  const [loading, setLoading] = useState(true);
+
+  const handleAddToCart = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      await api.post(
+        `/cart/add/${product._id}`,
+        {
+          quantity: 1,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      toast.success("Added to cart");
+    } catch (error) {
+      console.log(error);
+
+      console.log(error.response);
+
+      toast.error(error.response?.data?.message || "Failed to add cart");
+    }
+  };
+
+  const handleAddToWishlist = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      await api.post(
+        `/wishlist/add/${product._id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      toast.success("Added to wishlist");
+    } catch (error) {
+      toast.error("Failed to add wishlist");
+    }
+  };
 
   useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const res = await api.get(`/products/${id}`);
 
-    const fetchProduct =
-      async () => {
-
-        try {
-
-          const res =
-            await api.get(
-              `/products/${id}`
-            );
-
-          setProduct(
-            res.data.product
-          );
-
-        } catch (error) {
-
-          console.log(error);
-
-        } finally {
-
-          setLoading(false);
-
-        }
-      };
+        setProduct(res.data.product);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
     fetchProduct();
-
   }, [id]);
 
   if (loading) {
-    return (
-      <h1 className="text-center mt-20">
-        Loading...
-      </h1>
-    );
+    return <h1 className="text-center mt-20">Loading...</h1>;
   }
 
   if (!product) {
-    return (
-      <h1 className="text-center mt-20">
-        Product Not Found
-      </h1>
-    );
+    return <h1 className="text-center mt-20">Product Not Found</h1>;
   }
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-10">
-
       <div className="grid md:grid-cols-2 gap-12">
-
         <div>
-
           <img
-            src={
-              product.images?.[0]
-            }
+            src={product.images?.[0]}
             alt={product.title}
             className="
             w-full
             rounded-2xl
             "
           />
-
         </div>
 
         <div>
-
           <h1
             className="
             text-5xl
@@ -124,8 +138,7 @@ function ProductDetails() {
             mt-6
             "
           >
-            ⭐
-            {product.averageRating || 0}
+            ⭐{product.averageRating || 0}
           </p>
 
           <div
@@ -135,36 +148,33 @@ function ProductDetails() {
             mt-8
             "
           >
-
             <button
+              onClick={handleAddToCart}
               className="
-              bg-purple-600
-              px-6
-              py-3
-              rounded-xl
-              "
+  bg-purple-600
+  px-6
+  py-3
+  rounded-xl
+  "
             >
               Add To Cart
             </button>
 
             <button
+              onClick={handleAddToWishlist}
               className="
-              border
-              border-gray-600
-              px-6
-              py-3
-              rounded-xl
-              "
+  border
+  border-gray-600
+  px-6
+  py-3
+  rounded-xl
+  "
             >
               Add To Wishlist
             </button>
-
           </div>
-
         </div>
-
       </div>
-
     </div>
   );
 }
