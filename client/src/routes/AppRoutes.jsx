@@ -7,6 +7,8 @@ import Home from "../pages/Home/Home";
 import Login from "../pages/Login/Login";
 import Register from "../pages/Register/Register";
 
+import Cart from "../pages/Cart/Cart";
+
 import ProductDetails from "../pages/ProductDetails/ProductDetails";
 
 function AppRoutes() {
@@ -18,15 +20,11 @@ function AppRoutes() {
 
           <Route path="/products/:id" element={<ProductDetails />} />
 
-          <Route
-  path="/login"
-  element={<Login />}
-/>
+          <Route path="/login" element={<Login />} />
 
-<Route
-  path="/register"
-  element={<Register />}
-/>
+          <Route path="/register" element={<Register />} />
+
+          <Route path="/cart" element={<Cart />} />
         </Routes>
       </MainLayout>
     </BrowserRouter>
