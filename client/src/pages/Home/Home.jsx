@@ -1,10 +1,12 @@
+import Hero from "../../components/Hero/Hero";
+import AIStylistBanner from "../../components/AIStylistBanner/AIStylistBanner";
+
 function Home() {
   return (
-    <div>
-      <h1 className="text-3xl font-bold">
-        Home Page
-      </h1>
-    </div>
+    <>
+      <Hero />
+      <AIStylistBanner />
+    </>
   );
 }
 
