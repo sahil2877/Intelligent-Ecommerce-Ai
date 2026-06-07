@@ -1,6 +1,6 @@
 import Hero from "../../components/Hero/Hero";
-import AIStylistBanner from "../../components/AIStylistBanner/AIStylistBanner";
 import FeaturedProducts from "../../components/FeaturedProducts/FeaturedProducts";
+import AIStylist from "../../components/AIStylist/AIStylist";
 
 function Home() {
   return (
@@ -9,7 +9,7 @@ function Home() {
 
       <FeaturedProducts />
 
-      <AIStylistBanner />
+      <AIStylist />
     </>
   );
 }
