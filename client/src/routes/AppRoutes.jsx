@@ -13,6 +13,8 @@ import Wishlist from "../pages/Wishlist/Wishlist";
 
 import Orders from "../pages/Orders/Orders";
 
+import Products from "../pages/Products/Products";
+
 import ProductDetails from "../pages/ProductDetails/ProductDetails";
 
 function AppRoutes() {
@@ -29,6 +31,8 @@ function AppRoutes() {
           <Route path="/register" element={<Register />} />
 
           <Route path="/cart" element={<Cart />} />
+
+          <Route path="/products" element={<Products />} />
 
           <Route path="/wishlist" element={<Wishlist />} />
 
