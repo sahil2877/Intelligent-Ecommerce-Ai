@@ -32,6 +32,10 @@ function Navbar() {
 
         <Link to="/wishlist">Wishlist</Link>
 
+        <Link to="/orders">
+  Orders
+</Link>
+
         <Link to="/login">
   Login
 </Link>
