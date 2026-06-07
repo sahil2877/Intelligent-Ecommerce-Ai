@@ -41,8 +41,8 @@ function Hero() {
 
           <div
             className="
-            w-[350px]
-            h-[350px]
+            w-87.5
+            h-87.5
             rounded-full
             bg-purple-600/30
             blur-3xl

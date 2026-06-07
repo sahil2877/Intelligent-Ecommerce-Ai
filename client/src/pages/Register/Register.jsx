@@ -58,7 +58,7 @@ function Register() {
         border border-white/10
         p-8
         rounded-2xl
-        w-[400px]
+        w-100
         "
       >
 
