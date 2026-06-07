@@ -1,4 +1,9 @@
+import { useNavigate } from "react-router-dom";
+
+
+
 function ProductCard({ product }) {
+  const navigate = useNavigate();
   return (
     <div
       className="
@@ -52,14 +57,10 @@ function ProductCard({ product }) {
         </p>
 
         <button
-          className="
-          w-full
-          mt-4
-          bg-purple-600
-          py-3
-          rounded-xl
-          "
-        >
+  onClick={() =>
+    navigate(`/products/${product._id}`)
+  }
+>
           View Product
         </button>
 
