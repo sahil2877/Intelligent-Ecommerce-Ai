@@ -60,9 +60,21 @@ function ProductCard({ product }) {
   onClick={() =>
     navigate(`/products/${product._id}`)
   }
+  className="
+    w-full
+    mt-4
+    bg-purple-600
+    hover:bg-purple-700
+    text-white
+    font-semibold
+    py-3
+    rounded-xl
+    transition
+    duration-300
+  "
 >
-          View Product
-        </button>
+  View Product
+</button>
 
       </div>
 
