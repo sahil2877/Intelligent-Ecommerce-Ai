@@ -17,6 +17,9 @@ import Products from "../pages/Products/Products";
 
 import ProductDetails from "../pages/ProductDetails/ProductDetails";
 
+import Dashboard
+from "../pages/Admin/Dashboard";
+
 function AppRoutes() {
   return (
     <BrowserRouter>
