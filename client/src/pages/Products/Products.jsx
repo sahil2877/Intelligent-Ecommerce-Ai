@@ -6,6 +6,10 @@ function Products() {
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
 
+  const [categories, setCategories] = useState([]);
+
+  const [selectedCategory, setSelectedCategory] = useState("All");
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -18,6 +22,29 @@ function Products() {
     };
 
     fetchProducts();
+
+    const fetchCategories =
+async () => {
+
+  try {
+
+    const res =
+      await api.get(
+        "/categories"
+      );
+
+    setCategories(
+      res.data.categories
+    );
+
+  } catch (error) {
+
+    console.log(error);
+
+  }
+};
+
+fetchCategories();
   }, []);
 
   return (
@@ -46,6 +73,44 @@ function Products() {
   border border-gray-700
   "
       />
+      <div className="flex gap-4 mb-8 flex-wrap">
+
+  <button
+    onClick={() =>
+      setSelectedCategory("All")
+    }
+    className="
+    bg-purple-600
+    px-4
+    py-2
+    rounded-lg
+    "
+  >
+    All
+  </button>
+
+  {categories.map((category) => (
+
+    <button
+      key={category._id}
+      onClick={() =>
+        setSelectedCategory(
+          category.name
+        )
+      }
+      className="
+      bg-[#111827]
+      px-4
+      py-2
+      rounded-lg
+      "
+    >
+      {category.name}
+    </button>
+
+  ))}
+
+</div>
 
       <div
         className="
@@ -57,26 +122,40 @@ function Products() {
         gap-8
         "
       >
-       {
-products
-.filter((product) =>
-  product.title
-    .toLowerCase()
-    .includes(
-      search.toLowerCase()
-    )
-)
-.map((product) => (
+        {products
+.filter((product) => {
 
-  <ProductCard
-    key={product._id}
-    product={product}
-  />
+  const matchesSearch =
+    product.title
+      .toLowerCase()
+      .includes(
+        search.toLowerCase()
+      );
 
-))
-}
+  const matchesCategory =
+
+    selectedCategory ===
+    "All"
+
+    ||
+
+    product.category?.name ===
+    selectedCategory;
+
+  return (
+    matchesSearch &&
+    matchesCategory
+  );
+
+})
+          .map((product) => (
+            <ProductCard key={product._id} product={product} />
+          ))}
       </div>
+      
     </div>
+
+    
   );
 }
 
