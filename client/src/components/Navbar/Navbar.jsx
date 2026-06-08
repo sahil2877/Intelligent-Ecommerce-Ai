@@ -43,9 +43,13 @@ function Navbar() {
 
             <Link to="/orders">Orders</Link>
 
-            <Link to="/dashboard">Dashboard</Link>
+            {user?.role === "admin" && (
+              <>
+                <Link to="/dashboard">Dashboard</Link>
 
-            <Link to="/admin/products">Admin</Link>
+                <Link to="/admin/products">Admin</Link>
+              </>
+            )}
 
             <button
               onClick={handleLogout}
