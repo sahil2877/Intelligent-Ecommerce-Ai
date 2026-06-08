@@ -1,67 +1,67 @@
 import { useState } from "react";
 import api from "../../api/axios";
 import { Link } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 function AddProduct() {
+  const [image, setImage] = useState(null);
 
-  const [formData, setFormData] =
-    useState({
-      title: "",
-      description: "",
-      price: "",
-      brand: "",
-      stock: "",
-      category: ""
-    });
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  if (user?.role !== "admin") {
+    return <Navigate to="/" />;
+  }
+
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    price: "",
+    brand: "",
+    stock: "",
+    category: "",
+  });
 
   const handleChange = (e) => {
-
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
-
   };
 
-  const handleSubmit =
-    async (e) => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-      e.preventDefault();
+    try {
+      const token = localStorage.getItem("token");
 
-      try {
+      const productRes = await api.post("/products", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-        const token =
-          localStorage.getItem(
-            "token"
-          );
+      const productId = productRes.data.product._id;
 
-        await api.post(
-          "/products",
-          formData,
-          {
-            headers: {
-              Authorization:
-                `Bearer ${token}`
-            }
-          }
-        );
+      if (image) {
+        const imageData = new FormData();
 
-        alert(
-          "Product Added"
-        );
+        imageData.append("image", image);
 
-      } catch (error) {
-
-        console.log(error);
-
+        await api.post(`/products/upload-image/${productId}`, imageData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
       }
 
-    };
+      alert("Product Added");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
-
     <div className="max-w-3xl mx-auto p-10">
-
       <h1
         className="
         text-4xl
@@ -80,7 +80,6 @@ function AddProduct() {
         gap-4
         "
       >
-
         <input
           type="text"
           name="title"
@@ -115,37 +114,22 @@ function AddProduct() {
           onChange={handleChange}
         />
 
-        <select
-          name="category"
-          onChange={handleChange}
-        >
+        <select name="category" onChange={handleChange}>
+          <option value="">Select Category</option>
 
-          <option value="">
-            Select Category
-          </option>
+          <option value="6a23bc746ea2447bdaa716e1">Smartphones</option>
 
-          <option value="6a23bc746ea2447bdaa716e1">
-            Smartphones
-          </option>
+          <option value="6a258002e8210754c3f4fac2">Laptops</option>
 
-          <option value="6a258002e8210754c3f4fac2">
-            Laptops
-          </option>
+          <option value="6a258027e8210754c3f4fac3">Watches</option>
 
-          <option value="6a258027e8210754c3f4fac3">
-            Watches
-          </option>
+          <option value="6a25802de8210754c3f4fac4">Audio</option>
 
-          <option value="6a25802de8210754c3f4fac4">
-            Audio
-          </option>
-
-          <option value="6a258226f4ac105d65063e18">
-            Gaming
-          </option>
-
+          <option value="6a258226f4ac105d65063e18">Gaming</option>
         </select>
 
+        <input type="file" onChange={(e) => setImage(e.target.files[0])} />
+       
         <button
           type="submit"
           className="
@@ -156,11 +140,8 @@ function AddProduct() {
         >
           Add Product
         </button>
-
       </form>
-
     </div>
-
   );
 }
 

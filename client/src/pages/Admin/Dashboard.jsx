@@ -1,7 +1,15 @@
 import { useEffect, useState } from "react";
 import api from "../../api/axios";
+import { Navigate } from "react-router-dom";
 
 function Dashboard() {
+  const user = JSON.parse(
+  localStorage.getItem("user")
+);
+
+if (user?.role !== "admin") {
+  return <Navigate to="/" />;
+}
 
   const [stats, setStats] =
     useState(null);

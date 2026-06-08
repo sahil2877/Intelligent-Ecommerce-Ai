@@ -2,8 +2,16 @@
 import { useEffect, useState } from "react";
 import api from "../../api/axios";
 import { Link } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 function AdminProducts() {
+  const user = JSON.parse(
+  localStorage.getItem("user")
+);
+
+if (user?.role !== "admin") {
+  return <Navigate to="/" />;
+}
 
   const [products, setProducts] =
     useState([]);
