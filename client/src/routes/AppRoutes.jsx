@@ -17,8 +17,11 @@ import Products from "../pages/Products/Products";
 
 import ProductDetails from "../pages/ProductDetails/ProductDetails";
 
-import Dashboard
-from "../pages/Admin/Dashboard";
+import Dashboard from "../pages/Admin/Dashboard";
+
+import AdminProducts from "../pages/Admin/AdminProducts";
+
+import AddProduct from "../pages/Admin/AddProduct";
 
 function AppRoutes() {
   return (
@@ -40,6 +43,10 @@ function AppRoutes() {
           <Route path="/wishlist" element={<Wishlist />} />
 
           <Route path="/orders" element={<Orders />} />
+
+          <Route path="/admin/products" element={<AdminProducts />} />
+
+          <Route path="/admin/add-product" element={<AddProduct />} />
         </Routes>
       </MainLayout>
     </BrowserRouter>

@@ -7,9 +7,11 @@ function Home() {
     <>
       <Hero />
 
+      <AIStylist />
+
       <FeaturedProducts />
 
-      <AIStylist />
+      
     </>
   );
 }
