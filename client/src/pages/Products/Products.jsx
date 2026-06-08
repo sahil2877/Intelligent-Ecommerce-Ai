@@ -1,14 +1,29 @@
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import api from "../../api/axios";
 import ProductCard from "../../components/ProductCard/ProductCard";
 
 function Products() {
+  const location = useLocation();
   const [products, setProducts] = useState([]);
-  const [search, setSearch] = useState("");
+  const searchQuery =
+  new URLSearchParams(
+    location.search
+  ).get("search") || "";
+
+const [search, setSearch] =
+  useState(searchQuery);
 
   const [categories, setCategories] = useState([]);
 
   const [selectedCategory, setSelectedCategory] = useState("All");
+  useEffect(() => {
+
+  setSearch(
+    searchQuery
+  );
+
+}, [searchQuery]);
 
   useEffect(() => {
     const fetchProducts = async () => {

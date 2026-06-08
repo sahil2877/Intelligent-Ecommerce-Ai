@@ -1,6 +1,13 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Navbar() {
+  const [search, setSearch] =
+  useState("");
+
+const navigate =
+  useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -15,19 +22,38 @@ function Navbar() {
       <h1 className="text-3xl font-bold">Nexora</h1>
 
       <div className="hidden md:flex">
-        <input
-          type="text"
-          placeholder="Search products..."
-          className="
-    w-80
-    px-4
-    py-2
-    rounded-xl
-    bg-[#111827]
-    border border-gray-700
-    outline-none
-    "
-        />
+       <input
+  type="text"
+  placeholder="Search products..."
+  value={search}
+  onChange={(e) =>
+    setSearch(
+      e.target.value
+    )
+  }
+  onKeyDown={(e) => {
+
+    if (
+      e.key === "Enter"
+    ) {
+
+      navigate(
+        `/products?search=${search}`
+      );
+
+    }
+
+  }}
+  className="
+  w-80
+  px-4
+  py-2
+  rounded-xl
+  bg-[#111827]
+  border border-gray-700
+  outline-none
+  "
+/>
       </div>
 
       <div className="flex gap-8 items-center">
