@@ -4,6 +4,12 @@ import api from "../../api/axios";
 import { toast } from "react-hot-toast";
 
 function ProductDetails() {
+  const [reviews, setReviews] = useState([]);
+
+  const [rating, setRating] = useState(5);
+
+  const [comment, setComment] = useState("");
+
   const { id } = useParams();
 
   const [product, setProduct] = useState(null);
@@ -56,6 +62,34 @@ function ProductDetails() {
     }
   };
 
+  const handleReview = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      await api.post(
+        `/reviews/${id}`,
+        {
+          rating,
+          comment,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      toast.success("Review Added");
+
+      setComment("");
+
+      fetchReviews();
+      fetchProduct();
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Review Failed");
+    }
+  };
+
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -68,8 +102,18 @@ function ProductDetails() {
         setLoading(false);
       }
     };
+    const fetchReviews = async () => {
+      try {
+        const res = await api.get(`/reviews/${id}`);
+
+        setReviews(res.data.reviews);
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
     fetchProduct();
+    fetchReviews();
   }, [id]);
 
   if (loading) {
@@ -172,6 +216,65 @@ function ProductDetails() {
             >
               Add To Wishlist
             </button>
+          </div>
+          <div className="mt-16">
+            <h2 className="text-3xl font-bold mb-6">Reviews</h2>
+
+            <div className="flex flex-col gap-4 mb-8">
+              <select
+                value={rating}
+                onChange={(e) => setRating(e.target.value)}
+                className="text-black p-2"
+              >
+                <option value="5">5 Stars</option>
+
+                <option value="4">4 Stars</option>
+
+                <option value="3">3 Stars</option>
+
+                <option value="2">2 Stars</option>
+
+                <option value="1">1 Star</option>
+              </select>
+
+              <textarea
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                placeholder="Write review"
+                className="text-black p-2"
+              />
+
+              <button
+                onClick={handleReview}
+                className="
+      bg-purple-600
+      px-4
+      py-2
+      rounded
+      "
+              >
+                Submit Review
+              </button>
+            </div>
+
+            {reviews.map((review) => (
+              <div
+                key={review._id}
+                className="
+      border
+      border-gray-700
+      p-4
+      rounded
+      mb-4
+      "
+              >
+                <h3 className="font-bold">{review.user?.name}</h3>
+
+                <p>⭐ {review.rating}</p>
+
+                <p>{review.comment}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>

@@ -1,81 +1,49 @@
-
 import { useEffect, useState } from "react";
 import api from "../../api/axios";
 import { Link } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 
 function AdminProducts() {
-  const user = JSON.parse(
-  localStorage.getItem("user")
-);
+  const user = JSON.parse(localStorage.getItem("user"));
 
-if (user?.role !== "admin") {
-  return <Navigate to="/" />;
-}
+  if (user?.role !== "admin") {
+    return <Navigate to="/" />;
+  }
 
-  const [products, setProducts] =
-    useState([]);
+  const [products, setProducts] = useState([]);
 
-  const fetchProducts =
-    async () => {
+  const fetchProducts = async () => {
+    try {
+      const res = await api.get("/products");
 
-      try {
-
-        const res =
-          await api.get(
-            "/products"
-          );
-
-        setProducts(
-          res.data.products
-        );
-
-      } catch (error) {
-
-        console.log(error);
-
-      }
-    };
+      setProducts(res.data.products);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
-
     fetchProducts();
-
   }, []);
 
-  const deleteProduct =
-    async (id) => {
+  const deleteProduct = async (id) => {
+    try {
+      const token = localStorage.getItem("token");
 
-      try {
+      await api.delete(`/products/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-        const token =
-          localStorage.getItem(
-            "token"
-          );
-
-        await api.delete(
-          `/products/${id}`,
-          {
-            headers: {
-              Authorization:
-                `Bearer ${token}`
-            }
-          }
-        );
-
-        fetchProducts();
-
-      } catch (error) {
-
-        console.log(error);
-
-      }
-    };
+      fetchProducts();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
-
     <div className="max-w-7xl mx-auto p-10">
-
       <h1
         className="
         text-4xl
@@ -85,18 +53,18 @@ if (user?.role !== "admin") {
       >
         Manage Products
       </h1>
-   
-<Link
-  to="/admin/add-product"
-  className="
+
+      <Link
+        to="/admin/add-product"
+        className="
   bg-purple-600
   px-4
   py-2
   rounded-lg
   "
->
-  Add Product
-</Link>
+      >
+        Add Product
+      </Link>
 
       <table
         className="
@@ -104,11 +72,8 @@ if (user?.role !== "admin") {
         border
         "
       >
-
         <thead>
-
           <tr>
-
             <th>Title</th>
 
             <th>Price</th>
@@ -116,40 +81,34 @@ if (user?.role !== "admin") {
             <th>Stock</th>
 
             <th>Actions</th>
-
           </tr>
-
         </thead>
 
         <tbody>
+          {products.map((product) => (
+            <tr key={product._id}>
+              <td>{product.title}</td>
 
-          {products.map(
-            (product) => (
+              <td>₹{product.price}</td>
 
-            <tr
-              key={product._id}
-            >
-
-              <td>
-                {product.title}
-              </td>
+              <td>{product.stock}</td>
 
               <td>
-                ₹{product.price}
-              </td>
-
-              <td>
-                {product.stock}
-              </td>
-
-              <td>
+                <Link
+                  to={`/admin/edit-product/${product._id}`}
+                  className="
+    bg-blue-600
+    px-3
+    py-2
+    rounded
+    mr-2
+    "
+                >
+                  Edit
+                </Link>
 
                 <button
-                  onClick={() =>
-                    deleteProduct(
-                      product._id
-                    )
-                  }
+                  onClick={() => deleteProduct(product._id)}
                   className="
                   bg-red-600
                   px-4
@@ -159,19 +118,12 @@ if (user?.role !== "admin") {
                 >
                   Delete
                 </button>
-
               </td>
-
             </tr>
-
           ))}
-
         </tbody>
-
       </table>
-
     </div>
-
   );
 }
 

@@ -23,6 +23,10 @@ import AdminProducts from "../pages/Admin/AdminProducts";
 
 import AddProduct from "../pages/Admin/AddProduct";
 
+import EditProduct from "../pages/Admin/EditProduct";
+
+import AdminOrders from "../pages/Admin/AdminOrders";
+
 function AppRoutes() {
   return (
     <BrowserRouter>
@@ -47,6 +51,10 @@ function AppRoutes() {
           <Route path="/admin/products" element={<AdminProducts />} />
 
           <Route path="/admin/add-product" element={<AddProduct />} />
+
+          <Route path="/admin/edit-product/:id" element={<EditProduct />} />
+
+          <Route path="/admin/orders" element={<AdminOrders />} />
         </Routes>
       </MainLayout>
     </BrowserRouter>

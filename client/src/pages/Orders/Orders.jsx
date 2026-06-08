@@ -2,57 +2,33 @@ import { useEffect, useState } from "react";
 import api from "../../api/axios";
 
 function Orders() {
-
-  const [orders, setOrders] =
-    useState([]);
+  const [orders, setOrders] = useState([]);
 
   useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const token = localStorage.getItem("token");
 
-    const fetchOrders =
-      async () => {
+        const res = await api.get("/orders/my-orders", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-        try {
-
-          const token =
-            localStorage.getItem(
-              "token"
-            );
-
-          const res =
-            await api.get(
-              "/orders/my-orders",
-              {
-                headers: {
-                  Authorization:
-                    `Bearer ${token}`
-                }
-              }
-            );
-
-          setOrders(
-            res.data.orders
-          );
-
-        } catch (error) {
-
-          console.log(error);
-
-        }
-      };
+        setOrders(res.data.orders);
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
     fetchOrders();
-
   }, []);
 
   return (
     <div className="max-w-7xl mx-auto p-10">
-
-      <h1 className="text-4xl font-bold mb-10">
-        My Orders
-      </h1>
+      <h1 className="text-4xl font-bold mb-10">My Orders</h1>
 
       {orders.map((order) => (
-
         <div
           key={order._id}
           className="
@@ -63,7 +39,6 @@ function Orders() {
           mb-4
           "
         >
-
           <p>
             Order ID:
             {order._id}
@@ -71,13 +46,10 @@ function Orders() {
 
           <p>
             Status:
-            {order.status}
+            <span className="ml-2 font-bold">{order.orderStatus}</span>
           </p>
-
         </div>
-
       ))}
-
     </div>
   );
 }

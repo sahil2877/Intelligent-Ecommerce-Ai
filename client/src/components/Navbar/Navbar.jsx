@@ -47,6 +47,8 @@ function Navbar() {
               <>
                 <Link to="/dashboard">Dashboard</Link>
 
+                <Link to="/admin/orders">Manage Orders</Link>
+
                 <Link to="/admin/products">Admin</Link>
               </>
             )}
