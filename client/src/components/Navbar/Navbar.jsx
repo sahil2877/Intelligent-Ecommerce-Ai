@@ -52,6 +52,7 @@ function Navbar() {
                 <Link to="/admin/products">Admin</Link>
               </>
             )}
+            <Link to="/profile">Profile</Link>
 
             <button
               onClick={handleLogout}

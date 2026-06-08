@@ -15,9 +15,9 @@ const aiStylist = async (
 
         const products =
         await Product.find()
-        .select(
-            "title description category price brand averageRating"
-        );
+       .select(
+ "title description category price brand averageRating images"
+)
 
         const recommendation =
         await generateRecommendation(
@@ -25,10 +25,19 @@ const aiStylist = async (
             products
         );
 
-        res.status(200).json({
-            success: true,
-            recommendation
-        });
+
+const recommendedProducts =
+products.filter((product) =>
+    recommendation.includes(
+        product.title
+    )
+);
+
+res.status(200).json({
+    success: true,
+    recommendation,
+    recommendedProducts
+});
 
     } catch (error) {
 

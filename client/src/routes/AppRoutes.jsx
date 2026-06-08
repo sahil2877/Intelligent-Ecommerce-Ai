@@ -27,6 +27,8 @@ import EditProduct from "../pages/Admin/EditProduct";
 
 import AdminOrders from "../pages/Admin/AdminOrders";
 
+import Profile from "../pages/Profile/Profile";
+
 function AppRoutes() {
   return (
     <BrowserRouter>
@@ -57,6 +59,8 @@ function AppRoutes() {
           <Route path="/admin/orders" element={<AdminOrders />} />
 
           <Route path="/dashboard" element={<Dashboard />} />
+
+          <Route path="/profile" element={<Profile />} />
         </Routes>
       </MainLayout>
     </BrowserRouter>
