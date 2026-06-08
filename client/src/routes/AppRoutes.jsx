@@ -55,6 +55,8 @@ function AppRoutes() {
           <Route path="/admin/edit-product/:id" element={<EditProduct />} />
 
           <Route path="/admin/orders" element={<AdminOrders />} />
+
+          <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
       </MainLayout>
     </BrowserRouter>

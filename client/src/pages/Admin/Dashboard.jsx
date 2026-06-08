@@ -27,15 +27,15 @@ if (user?.role !== "admin") {
             );
 
           const res =
-            await api.get(
-              "/dashboard",
-              {
-                headers: {
-                  Authorization:
-                    `Bearer ${token}`
-                }
-              }
-            );
+           await api.get(
+  "/dashboard/stats",
+  {
+    headers: {
+      Authorization:
+        `Bearer ${token}`
+    }
+  }
+);
 
           setStats(res.data);
 

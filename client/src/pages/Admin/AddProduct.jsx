@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import api from "../../api/axios";
 import { Link } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 
 function AddProduct() {
+  const [categories, setCategories] = useState([]);
+
   const [image, setImage] = useState(null);
 
   const user = JSON.parse(localStorage.getItem("user"));
@@ -20,6 +22,20 @@ function AddProduct() {
     stock: "",
     category: "",
   });
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const fetchCategories = async () => {
+    try {
+      const res = await api.get("/categories");
+
+      setCategories(res.data.categories);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleChange = (e) => {
     setFormData({
@@ -114,22 +130,26 @@ function AddProduct() {
           onChange={handleChange}
         />
 
-        <select name="category" onChange={handleChange}>
+        <select
+          name="category"
+          onChange={handleChange}
+          className="
+  bg-white
+  text-black
+  p-3
+  rounded
+  "
+        >
           <option value="">Select Category</option>
 
-          <option value="6a23bc746ea2447bdaa716e1">Smartphones</option>
-
-          <option value="6a258002e8210754c3f4fac2">Laptops</option>
-
-          <option value="6a258027e8210754c3f4fac3">Watches</option>
-
-          <option value="6a25802de8210754c3f4fac4">Audio</option>
-
-          <option value="6a258226f4ac105d65063e18">Gaming</option>
+          {categories.map((category) => (
+            <option key={category._id} value={category._id}>
+              {category.name}
+            </option>
+          ))}
         </select>
-
         <input type="file" onChange={(e) => setImage(e.target.files[0])} />
-       
+
         <button
           type="submit"
           className="

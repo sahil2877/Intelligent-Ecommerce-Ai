@@ -69,7 +69,7 @@ function ProductDetails() {
       await api.post(
         `/reviews/${id}`,
         {
-          rating,
+          rating: Number(rating),
           comment,
         },
         {
@@ -218,13 +218,20 @@ function ProductDetails() {
             </button>
           </div>
           <div className="mt-16">
-            <h2 className="text-3xl font-bold mb-6">Reviews</h2>
+            <h2 className="text-3xl font-bold mb-6">
+              Reviews ({reviews.length})
+            </h2>
 
             <div className="flex flex-col gap-4 mb-8">
               <select
                 value={rating}
                 onChange={(e) => setRating(e.target.value)}
-                className="text-black p-2"
+                className="
+bg-white
+text-black
+p-2
+rounded
+"
               >
                 <option value="5">5 Stars</option>
 
@@ -241,7 +248,12 @@ function ProductDetails() {
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
                 placeholder="Write review"
-                className="text-black p-2"
+                className="
+bg-white
+text-black
+p-3
+rounded
+"
               />
 
               <button

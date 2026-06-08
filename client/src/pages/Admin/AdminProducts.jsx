@@ -44,28 +44,21 @@ function AdminProducts() {
 
   return (
     <div className="max-w-7xl mx-auto p-10">
-      <h1
-        className="
-        text-4xl
-        font-bold
-        mb-10
-        "
-      >
-        Manage Products
-      </h1>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-4xl font-bold">Manage Products</h1>
 
-      <Link
-        to="/admin/add-product"
-        className="
-  bg-purple-600
-  px-4
-  py-2
-  rounded-lg
-  "
-      >
-        Add Product
-      </Link>
-
+        <Link
+          to="/admin/add-product"
+          className="
+    bg-purple-600
+    px-5
+    py-3
+    rounded-lg
+    "
+        >
+          Add Product
+        </Link>
+      </div>
       <table
         className="
         w-full
@@ -74,12 +67,11 @@ function AdminProducts() {
       >
         <thead>
           <tr>
+            <th>Image</th>
             <th>Title</th>
-
+            <th>Category</th>
             <th>Price</th>
-
             <th>Stock</th>
-
             <th>Actions</th>
           </tr>
         </thead>
@@ -87,9 +79,23 @@ function AdminProducts() {
         <tbody>
           {products.map((product) => (
             <tr key={product._id}>
+              <td>
+                <img
+                  src={product.images?.[0]}
+                  alt={product.title}
+                  className="
+    w-16
+    h-16
+    object-cover
+    rounded
+    mx-auto
+    "
+                />
+              </td>
               <td>{product.title}</td>
 
-              <td>₹{product.price}</td>
+              <td>{product.category?.name}</td>
+              <td>₹{product.price.toLocaleString()}</td>
 
               <td>{product.stock}</td>
 
@@ -97,24 +103,30 @@ function AdminProducts() {
                 <Link
                   to={`/admin/edit-product/${product._id}`}
                   className="
-    bg-blue-600
-    px-3
-    py-2
-    rounded
-    mr-2
-    "
+bg-blue-600
+px-3
+py-2
+rounded
+mr-3
+inline-block
+"
                 >
                   Edit
                 </Link>
 
                 <button
-                  onClick={() => deleteProduct(product._id)}
-                  className="
-                  bg-red-600
-                  px-4
-                  py-2
-                  rounded
-                  "
+                  onClick={() => {
+                    if (window.confirm("Delete Product?")) {
+                      deleteProduct(product._id);
+                    }
+                  }}
+                 className="
+bg-red-600
+px-3
+py-2
+rounded
+inline-block
+"
                 >
                   Delete
                 </button>
