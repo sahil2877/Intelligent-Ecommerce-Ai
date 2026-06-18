@@ -14,10 +14,10 @@ const aiStylist = async (
         const { query } = req.body;
 
         const products =
-        await Product.find()
+        await Product.find().limit()
        .select(
- "title description category price brand averageRating images"
-)
+ "title description category price brand averageRating"
+);
 
         const recommendation =
         await generateRecommendation(

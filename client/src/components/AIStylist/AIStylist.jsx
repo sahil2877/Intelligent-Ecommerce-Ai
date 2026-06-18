@@ -47,7 +47,7 @@ console.log(error.response?.data);
         <div className="ai-hero">
           <div className="ai-orb">✦</div>
           <div className="eyebrow" style={{ justifyContent: "center" }}>
-            Intelligent Stylist
+            Shopwise AI Stylist
           </div>
           <h1 className="display-lg mb-16">Your Personal Shopping AI</h1>
           <p
@@ -72,7 +72,7 @@ console.log(error.response?.data);
                 fontFamily: "var(--font-mono)",
               }}
             >
-              AI Stylist — Intelligent Commerce
+              AI Stylist — Shopwise AI
             </span>
             <span
               style={{

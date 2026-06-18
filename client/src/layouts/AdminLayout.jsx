@@ -38,7 +38,14 @@ function AdminLayout({ children }) {
             style={{ cursor: "pointer" }}
             onClick={() => navigate("/dashboard")}
           >
-            <div className="nav-logo-mark">Ι</div>Admin Panel
+            <div className="nav-logo-mark">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
+                <path d="M5.5 8.5h13l-.85 9.4a2.2 2.2 0 0 1-2.2 2H8.55a2.2 2.2 0 0 1-2.2-2L5.5 8.5Z" stroke="#fff" strokeWidth="1.8" strokeLinejoin="round" />
+                <path d="M9 8.5V7a3 3 0 0 1 6 0v1.5" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" />
+                <path d="m12 11.4.62 1.63 1.63.62-1.63.62L12 16.5l-.62-1.63-1.63-.62 1.63-.62L12 11.4Z" fill="#fff" />
+              </svg>
+            </div>
+            Shopwise<span className="nav-logo-ai">AI</span>&nbsp;Admin
           </div>
         </div>
 
