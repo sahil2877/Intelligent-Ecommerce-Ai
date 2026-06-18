@@ -1,18 +1,29 @@
 import { useState } from "react";
 import api from "../../api/axios";
-import { Link } from "react-router-dom";
+import ProductCard from "../ProductCard/ProductCard";
+
+const suggestions = [
+  "Gaming laptop under ₹80,000",
+  "Best noise-cancelling headphones",
+  "iPhone alternative under ₹50k",
+  "4K camera for YouTube",
+  "Smart TV 55\" under ₹60k",
+  "Lightweight laptop for college",
+];
 
 function AIStylist() {
   const [query, setQuery] = useState("");
   const [response, setResponse] = useState("");
   const [loading, setLoading] = useState(false);
   const [products, setProducts] = useState([]);
+  const [lastQuery, setLastQuery] = useState("");
 
   const handleAskAI = async () => {
     if (!query) return;
 
     try {
       setLoading(true);
+      setLastQuery(query);
 
       const res = await api.post("/ai/stylist", {
         query,
@@ -23,170 +34,163 @@ function AIStylist() {
       setProducts(res.data.recommendedProducts);
     } catch (error) {
       console.log(error);
+      console.log(error.response);
+console.log(error.response?.data);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <section className="max-w-5xl mx-auto px-6 py-20">
-      <div
-        className="
-        bg-white/5
-        border border-white/10
-        rounded-3xl
-        p-8
-        backdrop-blur-md
-        "
-      >
-        <h2 className="text-4xl font-bold mb-4">AI Product Stylist</h2>
-
-        <p className="text-gray-400 mb-6">
-          Tell us what you need and get intelligent recommendations.
-        </p>
-
-        <textarea
-          rows="4"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Example: I need a smartphone under 1 lakh for photography"
-          className="
-          w-full
-          p-4
-          rounded-xl
-          bg-[#111827]
-          border border-gray-700
-          "
-        />
-        <div className="flex flex-wrap gap-3 mt-4">
-          <button
-            onClick={() => setQuery("I need a gaming laptop under 80000")}
-            className="border px-3 py-2 rounded"
+    <div className="ai-page">
+      <div className="container">
+        <div className="ai-hero">
+          <div className="ai-orb">✦</div>
+          <div className="eyebrow" style={{ justifyContent: "center" }}>
+            Intelligent Stylist
+          </div>
+          <h1 className="display-lg mb-16">Your Personal Shopping AI</h1>
+          <p
+            className="subheading"
+            style={{ maxWidth: "500px", margin: "0 auto" }}
           >
-            Gaming Laptop
-          </button>
-
-          <button
-            onClick={() =>
-              setQuery("Best smartphone under 50000 for photography")
-            }
-            className="border px-3 py-2 rounded"
-          >
-            Photography Phone
-          </button>
-
-          <button
-            onClick={() => setQuery("Best wireless earbuds under 10000")}
-            className="border px-3 py-2 rounded"
-          >
-            Audio Products
-          </button>
+            Describe what you need in natural language. Our AI understands
+            context, budget, and preferences to find your perfect product.
+          </p>
         </div>
 
-        <button
-          onClick={handleAskAI}
-          className="
-          mt-4
-          bg-purple-600
-          px-6
-          py-3
-          rounded-xl
-          "
-        >
-          {loading ? "Thinking..." : "Ask AI"}
-        </button>
-
-        {response && (
-          <div
-            className="
-  mt-8
-  p-5
-  bg-[#111827]
-  rounded-xl
-  whitespace-pre-wrap
-  "
-          >
-            {response}
+        <div className="ai-terminal">
+          <div className="ai-terminal-bar">
+            <div className="terminal-dot" style={{ background: "#F43F5E" }}></div>
+            <div className="terminal-dot" style={{ background: "#F59E0B" }}></div>
+            <div className="terminal-dot" style={{ background: "#10B981" }}></div>
+            <span
+              style={{
+                marginLeft: "8px",
+                fontSize: "12px",
+                color: "var(--muted)",
+                fontFamily: "var(--font-mono)",
+              }}
+            >
+              AI Stylist — Intelligent Commerce
+            </span>
+            <span
+              style={{
+                marginLeft: "auto",
+                fontSize: "11px",
+                color: "var(--emerald)",
+                background: "rgba(16,185,129,.1)",
+                padding: "2px 8px",
+                borderRadius: "4px",
+              }}
+            >
+              ● Online
+            </span>
           </div>
-        )}
-        {products.length > 0 && (
-          <div className="mt-10">
-            <h3
-              className="
-      text-2xl
-      font-bold
-      mb-6
-      "
-            >
-              Recommended Products
-            </h3>
 
-            <div
-              className="
-      grid
-      md:grid-cols-3
-      gap-6
-      "
-            >
-              {products.map((product) => (
-                <div
-                  key={product._id}
-                  className="
-          bg-[#111827]
-          p-4
-          rounded-xl
-          "
-                >
-                  <img
-                    src={product.images?.[0]}
-                    alt={product.title}
-                    className="
-            w-full
-            h-48
-            object-cover
-            rounded-lg
-            "
-                  />
+          <div className="ai-chat">
+            <div className="ai-msg assistant">
+              <div className="ai-msg-avatar">✦</div>
+              <div className="ai-msg-bubble">
+                Hello! I'm your personal AI Shopping Stylist. Tell me what you're
+                looking for — include your budget, use case, or any preferences —
+                and I'll find the perfect products for you.
+                <br />
+                <br />
+                <span style={{ color: "var(--muted)", fontSize: "13px" }}>
+                  Try asking: "I need a gaming laptop under ₹80,000"
+                </span>
+              </div>
+            </div>
 
-                  <h4
-                    className="
-            mt-4
-            font-bold
-            "
-                  >
-                    {product.title}
-                  </h4>
+            {lastQuery && (
+              <div className="ai-msg user">
+                <div className="ai-msg-avatar">U</div>
+                <div className="ai-msg-bubble">{lastQuery}</div>
+              </div>
+            )}
 
-                  <p>{product.brand}</p>
-
-                  <p
-                    className="
-            text-purple-400
-            font-bold
-            "
-                  >
-                    ₹{product.price}
-                  </p>
-                  <Link
-                    to={`/products/${product._id}`}
-                    className="
-  block
-  mt-4
-  bg-purple-600
-  text-center
-  py-2
-  rounded-lg
-  "
-                  >
-                    View Product
-                  </Link>
+            {loading && (
+              <div className="ai-msg assistant">
+                <div className="ai-msg-avatar">✦</div>
+                <div className="ai-typing">
+                  <div className="ai-typing-dot"></div>
+                  <div className="ai-typing-dot"></div>
+                  <div className="ai-typing-dot"></div>
                 </div>
+              </div>
+            )}
+
+            {!loading && response && (
+              <div className="ai-msg assistant">
+                <div className="ai-msg-avatar">✦</div>
+                <div
+                  className="ai-msg-bubble"
+                  style={{ whiteSpace: "pre-wrap" }}
+                >
+                  {response}
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="ai-input-row">
+            <textarea
+              className="ai-input"
+              rows="1"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  handleAskAI();
+                }
+              }}
+              placeholder="Ask anything — budget, use case, brand preference, specs…"
+            />
+            <button
+              className="ai-send"
+              onClick={handleAskAI}
+              disabled={loading}
+            >
+              ➤
+            </button>
+          </div>
+        </div>
+
+        <div className="ai-suggestions">
+          <div className="ai-suggestion-label">Try these prompts:</div>
+          <div className="ai-suggestion-chips">
+            {suggestions.map((s) => (
+              <span
+                key={s}
+                className="ai-chip"
+                onClick={() => setQuery(s)}
+              >
+                {s}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {products.length > 0 && (
+          <div className="ai-results">
+            <div className="ai-results-header">
+              <div className="ai-results-line"></div>
+              <div className="ai-results-label">
+                ✦ {products.length} AI Recommendations
+              </div>
+              <div className="ai-results-line"></div>
+            </div>
+            <div className="grid-3" style={{ marginBottom: "64px" }}>
+              {products.map((product) => (
+                <ProductCard key={product._id} product={product} />
               ))}
             </div>
           </div>
         )}
       </div>
-    </section>
+    </div>
   );
 }
 

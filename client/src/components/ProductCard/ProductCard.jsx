@@ -1,83 +1,55 @@
 import { useNavigate } from "react-router-dom";
 
-
-
 function ProductCard({ product }) {
   const navigate = useNavigate();
+
+  const goToProduct = () => navigate(`/products/${product._id}`);
+
+  const rating = Math.round(product.averageRating || 0);
+  const stars = "★★★★★".slice(0, rating) + "☆☆☆☆☆".slice(0, 5 - rating);
+
   return (
-    <div
-      className="
-      bg-[#111827]
-      rounded-2xl
-      overflow-hidden
-      border border-gray-800
-      hover:scale-105
-      transition
-      duration-300
-      "
-    >
-
-      <div className="h-56 bg-gray-800">
-
-        {product.images &&
-        product.images.length > 0 ? (
-
-          <img
-            src={product.images[0]}
-            alt={product.title}
-            className="
-            w-full
-            h-full
-            object-cover
-            "
-          />
-
+    <div className="product-card" onClick={goToProduct}>
+      <div className="product-img">
+        {product.images && product.images.length > 0 ? (
+          <img src={product.images[0]} alt={product.title} />
         ) : (
-
-          <div className="h-full flex items-center justify-center">
-            No Image
-          </div>
-
+          <span style={{ fontSize: "48px", opacity: 0.4 }}>🛍️</span>
         )}
-
       </div>
 
-      <div className="p-5">
+      <div className="product-info">
+        {product.brand && <div className="product-brand">{product.brand}</div>}
 
-        <h2 className="text-xl font-semibold">
-          {product.title}
-        </h2>
+        <div className="product-name">{product.title}</div>
 
-        <p className="text-gray-400 mt-2">
-          {product.brand}
-        </p>
+        <div className="product-rating">
+          <div className="stars">{stars}</div>
+          <span className="product-rating-text">
+            {(product.averageRating || 0).toFixed
+              ? Number(product.averageRating || 0).toFixed(1)
+              : product.averageRating || 0}
+          </span>
+        </div>
 
-        <p className="text-2xl font-bold mt-4 text-purple-400">
-          ₹{product.price}
-        </p>
+        <div className="product-price">
+          <span className="product-price-current">
+            ₹{Number(product.price).toLocaleString("en-IN")}
+          </span>
+        </div>
 
-        <button
-  onClick={() =>
-    navigate(`/products/${product._id}`)
-  }
-  className="
-    w-full
-    mt-4
-    bg-purple-600
-    hover:bg-purple-700
-    text-white
-    font-semibold
-    py-3
-    rounded-xl
-    transition
-    duration-300
-  "
->
-  View Product
-</button>
-
+        <div className="product-actions">
+          <button
+            className="btn btn-primary btn-sm"
+            onClick={(e) => {
+              e.stopPropagation();
+              goToProduct();
+            }}
+          >
+            View Product
+          </button>
+        </div>
       </div>
-
     </div>
   );
 }

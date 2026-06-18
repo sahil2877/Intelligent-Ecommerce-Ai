@@ -1,6 +1,14 @@
 import { useEffect, useState } from "react";
 import api from "../../api/axios";
 
+const statusBadge = {
+  Pending: "badge-amber",
+  Processing: "badge-primary",
+  Shipped: "badge-primary",
+  Delivered: "badge-success",
+  Cancelled: "badge-rose",
+};
+
 function Orders() {
   const [orders, setOrders] = useState([]);
 
@@ -25,31 +33,51 @@ function Orders() {
   }, []);
 
   return (
-    <div className="max-w-7xl mx-auto p-10">
-      <h1 className="text-4xl font-bold mb-10">My Orders</h1>
+    <div className="container section-sm">
+      <div className="eyebrow">Order History</div>
+      <h1 className="display-md mb-32">My Orders</h1>
 
-      {orders.map((order) => (
-        <div
-          key={order._id}
-          className="
-          border
-          border-gray-700
-          p-5
-          rounded-xl
-          mb-4
-          "
-        >
-          <p>
-            Order ID:
-            {order._id}
-          </p>
-
-          <p>
-            Status:
-            <span className="ml-2 font-bold">{order.orderStatus}</span>
-          </p>
+      {orders.length === 0 ? (
+        <div className="wishlist-empty">
+          <div className="wishlist-empty-icon">📋</div>
+          <h2 className="heading mb-8">No orders yet</h2>
+          <p className="text-muted">Your placed orders will appear here.</p>
         </div>
-      ))}
+      ) : (
+        orders.map((order) => (
+          <div key={order._id} className="order-card">
+            <div className="order-card-header">
+              <div>
+                <div className="order-num">#{order._id}</div>
+                {order.createdAt && (
+                  <div className="order-date">
+                    Placed on{" "}
+                    {new Date(order.createdAt).toLocaleDateString("en-IN", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </div>
+                )}
+              </div>
+              <span
+                className={
+                  "badge " + (statusBadge[order.orderStatus] || "badge-muted")
+                }
+              >
+                {order.orderStatus}
+              </span>
+            </div>
+            {typeof order.totalAmount !== "undefined" && (
+              <div className="order-card-footer">
+                <div className="order-total">
+                  ₹{Number(order.totalAmount).toLocaleString("en-IN")}
+                </div>
+              </div>
+            )}
+          </div>
+        ))
+      )}
     </div>
   );
 }

@@ -27,7 +27,11 @@ import EditProduct from "../pages/Admin/EditProduct";
 
 import AdminOrders from "../pages/Admin/AdminOrders";
 
+import AdminCategories from "../pages/Admin/AdminCategories";
+
 import Profile from "../pages/Profile/Profile";
+
+import AIStylist from "../components/AIStylist/AIStylist";
 
 function AppRoutes() {
   return (
@@ -46,6 +50,8 @@ function AppRoutes() {
 
           <Route path="/products" element={<Products />} />
 
+          <Route path="/ai-stylist" element={<AIStylist />} />
+
           <Route path="/wishlist" element={<Wishlist />} />
 
           <Route path="/orders" element={<Orders />} />
@@ -57,6 +63,8 @@ function AppRoutes() {
           <Route path="/admin/edit-product/:id" element={<EditProduct />} />
 
           <Route path="/admin/orders" element={<AdminOrders />} />
+
+          <Route path="/admin/categories" element={<AdminCategories />} />
 
           <Route path="/dashboard" element={<Dashboard />} />
 

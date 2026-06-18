@@ -1,15 +1,8 @@
 import { useEffect, useState } from "react";
-import api from "../../api/axios";
 import { Link } from "react-router-dom";
-import { Navigate } from "react-router-dom";
+import api from "../../api/axios";
 
 function AdminProducts() {
-  const user = JSON.parse(localStorage.getItem("user"));
-
-  if (user?.role !== "admin") {
-    return <Navigate to="/" />;
-  }
-
   const [products, setProducts] = useState([]);
 
   const fetchProducts = async () => {
@@ -42,100 +35,98 @@ function AdminProducts() {
     }
   };
 
-  return (
-    <div className="max-w-7xl mx-auto p-10">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-4xl font-bold">Manage Products</h1>
+  const stockBadge = (stock) => {
+    if (!stock || stock <= 0)
+      return <span className="badge badge-rose">Out of Stock</span>;
+    if (stock <= 10)
+      return <span className="badge badge-amber">Low Stock ({stock})</span>;
+    return <span className="badge badge-success">In Stock ({stock})</span>;
+  };
 
-        <Link
-          to="/admin/add-product"
-          className="
-    bg-purple-600
-    px-5
-    py-3
-    rounded-lg
-    "
-        >
-          Add Product
+  return (
+    <>
+      <div className="admin-page-header">
+        <div>
+          <div className="admin-page-title">Product Management</div>
+          <div className="admin-breadcrumb">
+            Admin / <span>Products</span>
+          </div>
+        </div>
+        <Link to="/admin/add-product" className="btn btn-primary">
+          + Add New Product
         </Link>
       </div>
-      <table
-        className="
-        w-full
-        border
-        "
-      >
-        <thead>
-          <tr>
-            <th>Image</th>
-            <th>Title</th>
-            <th>Category</th>
-            <th>Price</th>
-            <th>Stock</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
 
-        <tbody>
-          {products.map((product) => (
-            <tr key={product._id}>
-              <td>
-                <img
-                  src={product.images?.[0]}
-                  alt={product.title}
-                  className="
-    w-16
-    h-16
-    object-cover
-    rounded
-    mx-auto
-    "
-                />
-              </td>
-              <td>{product.title}</td>
-
-              <td>{product.category?.name}</td>
-              <td>₹{product.price.toLocaleString()}</td>
-
-              <td>{product.stock}</td>
-
-              <td>
-                <Link
-                  to={`/admin/edit-product/${product._id}`}
-                  className="
-bg-blue-600
-px-3
-py-2
-rounded
-mr-3
-inline-block
-"
-                >
-                  Edit
-                </Link>
-
-                <button
-                  onClick={() => {
-                    if (window.confirm("Delete Product?")) {
-                      deleteProduct(product._id);
-                    }
-                  }}
-                 className="
-bg-red-600
-px-3
-py-2
-rounded
-inline-block
-"
-                >
-                  Delete
-                </button>
-              </td>
+      <div className="admin-table-card">
+        <div className="admin-table-header">
+          <div className="heading">All Products</div>
+          <div className="admin-table-actions">
+            <span className="text-muted text-sm">
+              {products.length} products
+            </span>
+          </div>
+        </div>
+        <table className="admin-table">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Category</th>
+              <th>Price</th>
+              <th>Stock</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+          </thead>
+          <tbody>
+            {products.map((product) => (
+              <tr key={product._id}>
+                <td>
+                  <div className="table-product-cell">
+                    <div className="table-product-img">
+                      {product.images?.[0] ? (
+                        <img src={product.images[0]} alt={product.title} />
+                      ) : (
+                        <span>🛍️</span>
+                      )}
+                    </div>
+                    <div>
+                      <div className="table-product-name">{product.title}</div>
+                      {product.brand && (
+                        <div className="table-product-sku">{product.brand}</div>
+                      )}
+                    </div>
+                  </div>
+                </td>
+                <td>{product.category?.name}</td>
+                <td style={{ color: "var(--snow)", fontWeight: 600 }}>
+                  ₹{Number(product.price).toLocaleString("en-IN")}
+                </td>
+                <td>{stockBadge(product.stock)}</td>
+                <td>
+                  <div className="table-actions">
+                    <Link
+                      to={`/admin/edit-product/${product._id}`}
+                      className="btn btn-ghost btn-sm"
+                    >
+                      Edit
+                    </Link>
+                    <button
+                      className="btn btn-danger btn-sm"
+                      onClick={() => {
+                        if (window.confirm("Delete Product?")) {
+                          deleteProduct(product._id);
+                        }
+                      }}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
   );
 }
 

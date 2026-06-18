@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "../../api/axios";
 import ProductCard from "../ProductCard/ProductCard";
 
 function FeaturedProducts() {
   const [products, setProducts] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -20,19 +22,33 @@ function FeaturedProducts() {
   }, []);
 
   return (
-    <section className="max-w-7xl mx-auto px-6 py-20">
-      <h2 className="text-4xl font-bold mb-10">Featured Products</h2>
+    <section className="section">
+      <div className="container">
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-end",
+            marginBottom: "32px",
+          }}
+        >
+          <div>
+            <div className="eyebrow">Handpicked</div>
+            <h2 className="display-md">Featured Products</h2>
+          </div>
+          <button
+            className="btn btn-ghost btn-sm"
+            onClick={() => navigate("/products")}
+          >
+            View all →
+          </button>
+        </div>
 
-      <div
-        className="grid
-grid-cols-1
-sm:grid-cols-2
-lg:grid-cols-4
-gap-8"
-      >
-        {products.map((product) => (
-          <ProductCard key={product._id} product={product} />
-        ))}
+        <div className="grid-4">
+          {products.slice(0, 8).map((product) => (
+            <ProductCard key={product._id} product={product} />
+          ))}
+        </div>
       </div>
     </section>
   );

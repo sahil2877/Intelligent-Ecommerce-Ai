@@ -1,104 +1,117 @@
-import { Link } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 function Navbar() {
-  const [search, setSearch] =
-  useState("");
-
-const navigate =
-  useNavigate();
+  const [search, setSearch] = useState("");
+  const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
+  const isAdmin = user?.role === "admin";
+
   const handleLogout = () => {
     localStorage.removeItem("token");
-
     localStorage.removeItem("user");
-
     window.location.href = "/";
   };
 
+  const linkClass = ({ isActive }) =>
+    "nav-link" + (isActive ? " active" : "");
+
   return (
-    <nav className="max-w-7xl mx-auto flex justify-between items-center px-8 py-6">
-      <h1 className="text-3xl font-bold">Nexora</h1>
+    <nav className="global-nav">
+      <div className="nav-inner">
+        <div
+          className="nav-logo"
+          style={{ cursor: "pointer" }}
+          onClick={() => navigate("/")}
+        >
+          <div className="nav-logo-mark">Ι</div>
+          Intelligent
+        </div>
 
-      <div className="hidden md:flex">
-       <input
-  type="text"
-  placeholder="Search products..."
-  value={search}
-  onChange={(e) =>
-    setSearch(
-      e.target.value
-    )
-  }
-  onKeyDown={(e) => {
+        <div className="nav-search">
+          <svg
+            width="14"
+            height="14"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.35-4.35" />
+          </svg>
+          <input
+            type="text"
+            placeholder="Search products, brands, categories…"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                navigate(`/products?search=${search}`);
+              }
+            }}
+          />
+        </div>
 
-    if (
-      e.key === "Enter"
-    ) {
+        <div className="nav-links">
+          <NavLink to="/" end className={linkClass}>
+            Home
+          </NavLink>
 
-      navigate(
-        `/products?search=${search}`
-      );
+          <NavLink to="/products" className={linkClass}>
+            Products
+          </NavLink>
 
-    }
+          <NavLink to="/ai-stylist" className={linkClass}>
+            ✦ AI Stylist
+          </NavLink>
 
-  }}
-  className="
-  w-80
-  px-4
-  py-2
-  rounded-xl
-  bg-[#111827]
-  border border-gray-700
-  outline-none
-  "
-/>
-      </div>
+          {user ? (
+            <>
+              {isAdmin ? (
+                <NavLink to="/dashboard" className={linkClass}>
+                  Dashboard
+                </NavLink>
+              ) : (
+                <>
+                  <NavLink to="/wishlist" className={linkClass}>
+                    ♡ Wishlist
+                  </NavLink>
 
-      <div className="flex gap-8 items-center">
-        <Link to="/">Home</Link>
+                  <NavLink to="/cart" className={linkClass}>
+                    Cart
+                  </NavLink>
 
-        <Link to="/products">Products</Link>
+                  <NavLink to="/orders" className={linkClass}>
+                    Orders
+                  </NavLink>
+                </>
+              )}
 
-        {user ? (
-          <>
-            <Link to="/cart">Cart</Link>
+              <div
+                className="nav-avatar"
+                title={user?.name || "Profile"}
+                onClick={() => navigate("/profile")}
+              >
+                {(user?.name || "U").charAt(0).toUpperCase()}
+              </div>
 
-            <Link to="/wishlist">Wishlist</Link>
+              <button className="nav-link" onClick={handleLogout}>
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <NavLink to="/login" className={linkClass}>
+                Login
+              </NavLink>
 
-            <Link to="/orders">Orders</Link>
-
-            {user?.role === "admin" && (
-              <>
-                <Link to="/dashboard">Dashboard</Link>
-
-                <Link to="/admin/orders">Manage Orders</Link>
-
-                <Link to="/admin/products">Admin</Link>
-              </>
-            )}
-            <Link to="/profile">Profile</Link>
-
-            <button
-              onClick={handleLogout}
-              className="
-        bg-red-600
-        px-4
-        py-2
-        rounded-lg
-        "
-            >
-              Logout
-            </button>
-          </>
-        ) : (
-          <>
-            <Link to="/login">Login</Link>
-
-            <Link to="/register">Register</Link>
-          </>
-        )}
+              <NavLink to="/register" className={linkClass}>
+                Register
+              </NavLink>
+            </>
+          )}
+        </div>
       </div>
     </nav>
   );

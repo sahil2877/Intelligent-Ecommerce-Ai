@@ -1,18 +1,10 @@
 import { useEffect, useState } from "react";
 import api from "../../api/axios";
-import { Link } from "react-router-dom";
-import { Navigate } from "react-router-dom";
 
 function AddProduct() {
   const [categories, setCategories] = useState([]);
 
   const [image, setImage] = useState(null);
-
-  const user = JSON.parse(localStorage.getItem("user"));
-
-  if (user?.role !== "admin") {
-    return <Navigate to="/" />;
-  }
 
   const [formData, setFormData] = useState({
     title: "",
@@ -77,91 +69,119 @@ function AddProduct() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-10">
-      <h1
-        className="
-        text-4xl
-        font-bold
-        mb-8
-        "
-      >
-        Add Product
-      </h1>
-
-      <form
-        onSubmit={handleSubmit}
-        className="
-        flex
-        flex-col
-        gap-4
-        "
-      >
-        <input
-          type="text"
-          name="title"
-          placeholder="Title"
-          onChange={handleChange}
-        />
-
-        <textarea
-          name="description"
-          placeholder="Description"
-          onChange={handleChange}
-        />
-
-        <input
-          type="number"
-          name="price"
-          placeholder="Price"
-          onChange={handleChange}
-        />
-
-        <input
-          type="text"
-          name="brand"
-          placeholder="Brand"
-          onChange={handleChange}
-        />
-
-        <input
-          type="number"
-          name="stock"
-          placeholder="Stock"
-          onChange={handleChange}
-        />
-
-        <select
-          name="category"
-          onChange={handleChange}
-          className="
-  bg-white
-  text-black
-  p-3
-  rounded
-  "
-        >
-          <option value="">Select Category</option>
-
-          {categories.map((category) => (
-            <option key={category._id} value={category._id}>
-              {category.name}
-            </option>
-          ))}
-        </select>
-        <input type="file" onChange={(e) => setImage(e.target.files[0])} />
-
-        <button
-          type="submit"
-          className="
-          bg-purple-600
-          py-3
-          rounded-lg
-          "
-        >
-          Add Product
+    <form onSubmit={handleSubmit}>
+      <div className="admin-page-header">
+        <div>
+          <div className="admin-page-title">Add New Product</div>
+          <div className="admin-breadcrumb">
+            Admin / Products / <span>Add New</span>
+          </div>
+        </div>
+        <button type="submit" className="btn btn-primary">
+          Publish Product
         </button>
-      </form>
-    </div>
+      </div>
+
+      <div className="product-form-layout">
+        {/* Left */}
+        <div>
+          <div className="form-section">
+            <div className="form-section-title">Basic Information</div>
+            <div className="form-group mb-16">
+              <label className="form-label">Product Name *</label>
+              <input
+                className="form-input"
+                type="text"
+                name="title"
+                placeholder="e.g. Apple MacBook Pro 16 M3 Max"
+                onChange={handleChange}
+              />
+            </div>
+            <div className="form-group mb-16">
+              <label className="form-label">Brand</label>
+              <input
+                className="form-input"
+                type="text"
+                name="brand"
+                placeholder="e.g. Apple"
+                onChange={handleChange}
+              />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Description</label>
+              <textarea
+                className="form-textarea"
+                name="description"
+                rows="5"
+                placeholder="Detailed product description…"
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+
+          <div className="form-section">
+            <div className="form-section-title">Pricing & Inventory</div>
+            <div className="form-row mb-16">
+              <div className="form-group">
+                <label className="form-label">Price (₹) *</label>
+                <input
+                  className="form-input"
+                  type="number"
+                  name="price"
+                  placeholder="e.g. 349900"
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="form-group">
+                <label className="form-label">Stock Quantity *</label>
+                <input
+                  className="form-input"
+                  type="number"
+                  name="stock"
+                  placeholder="0"
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Right */}
+        <div>
+          <div className="form-section">
+            <div className="form-section-title">Product Image</div>
+            <input
+              type="file"
+              onChange={(e) => setImage(e.target.files[0])}
+              style={{ color: "var(--body)" }}
+            />
+          </div>
+
+          <div className="form-section">
+            <div className="form-section-title">Organisation</div>
+            <div className="form-group">
+              <label className="form-label">Category *</label>
+              <select
+                className="form-select"
+                name="category"
+                onChange={handleChange}
+              >
+                <option value="">Select Category</option>
+                {categories.map((category) => (
+                  <option key={category._id} value={category._id}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <button type="submit" className="btn btn-primary w-full">
+            Publish Product →
+          </button>
+        </div>
+      </div>
+    </form>
   );
 }
 

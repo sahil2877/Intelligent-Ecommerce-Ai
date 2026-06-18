@@ -60,165 +60,158 @@ function Cart() {
       console.log(error);
     }
   };
-  const handlePlaceOrder =
-async () => {
+  const handlePlaceOrder = async () => {
+    try {
+      const token = localStorage.getItem("token");
 
-  try {
-
-    const token =
-      localStorage.getItem(
-        "token"
+      await api.post(
+        "/orders/place-order",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
 
-    await api.post(
-      "/orders/place-order",
-      {},
-      {
-        headers: {
-          Authorization:
-            `Bearer ${token}`
-        }
-      }
-    );
-
-    alert(
-      "Order placed successfully"
-    );
-
-  } catch (error) {
-
-    console.log(error);
-
-  }
-};
+      alert("Order placed successfully");
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const total =
-cart?.items?.reduce(
-  (total, item) =>
-    total +
-    (
-      item.product?.price *
-      item.quantity
-    ),
-  0
-) || 0;
+    cart?.items?.reduce(
+      (total, item) => total + item.product?.price * item.quantity,
+      0,
+    ) || 0;
+
+  const itemCount = cart?.items?.length || 0;
 
   return (
-    <div className="max-w-7xl mx-auto p-10">
-      <h1 className="text-4xl font-bold mb-10">My Cart</h1>
-
-      {cart?.items?.map((item) => (
-        <div
-          key={item._id}
-          className="
-          border
-          border-gray-700
-          p-5
-          rounded-xl
-          mb-4
-          "
+    <div className="container section-sm">
+      <div className="eyebrow">Shopping Cart</div>
+      <h1 className="display-md mb-32">
+        My Cart{" "}
+        <span
+          style={{ fontSize: "18px", color: "var(--muted)", fontWeight: 400 }}
         >
-          <div
-            className="
-  flex
-  justify-between
-  items-center
-  "
-          >
-            <div>
-              <h2
-                className="
-      text-xl
-      font-semibold
-      "
-              >
-                {item.product?.title}
-              </h2>
+          ({itemCount} items)
+        </span>
+      </h1>
 
-              <p>₹{item.product?.price}</p>
-            </div>
-
+      {itemCount === 0 ? (
+        <div className="wishlist-empty">
+          <div className="wishlist-empty-icon">🛒</div>
+          <h2 className="heading mb-8">Your cart is empty</h2>
+          <p className="text-muted">Browse products and add items to your cart.</p>
+        </div>
+      ) : (
+        <div className="cart-layout">
+          <div>
             <div
-              className="
-    flex
-    items-center
-    gap-3
-    "
+              style={{
+                background: "var(--surface)",
+                border: "1px solid var(--border)",
+                borderRadius: "var(--radius-lg)",
+                overflow: "hidden",
+              }}
             >
-              <button
-                onClick={() =>
-                  updateQuantity(item.product._id, item.quantity - 1)
-                }
-                className="
-      px-3
-      py-1
-      bg-gray-700
-      rounded
-      "
-              >
-                -
-              </button>
+              {cart.items.map((item) => (
+                <div key={item._id} className="cart-item">
+                  <div className="cart-item-img">
+                    {item.product?.images?.[0] ? (
+                      <img
+                        src={item.product.images[0]}
+                        alt={item.product?.title}
+                      />
+                    ) : (
+                      <span>🛍️</span>
+                    )}
+                  </div>
+                  <div>
+                    <div className="cart-item-name">{item.product?.title}</div>
+                    {item.product?.brand && (
+                      <div className="cart-item-variant">
+                        {item.product.brand}
+                      </div>
+                    )}
+                    <div className="quantity-picker" style={{ marginBottom: 0 }}>
+                      <button
+                        className="qty-btn"
+                        onClick={() =>
+                          updateQuantity(item.product._id, item.quantity - 1)
+                        }
+                      >
+                        −
+                      </button>
+                      <span className="qty-num">{item.quantity}</span>
+                      <button
+                        className="qty-btn"
+                        onClick={() =>
+                          updateQuantity(item.product._id, item.quantity + 1)
+                        }
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="cart-item-price">
+                      ₹
+                      {Number(
+                        item.product?.price * item.quantity,
+                      ).toLocaleString("en-IN")}
+                    </div>
+                    <div
+                      className="cart-item-remove"
+                      onClick={() => removeItem(item.product._id)}
+                    >
+                      Remove
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
 
-              <span>{item.quantity}</span>
-
-              <button
-                onClick={() =>
-                  updateQuantity(item.product._id, item.quantity + 1)
-                }
-                className="
-      px-3
-      py-1
-      bg-gray-700
-      rounded
-      "
-              >
-                +
-              </button>
-
-              <button
-                onClick={() => removeItem(item.product._id)}
-                className="
-      bg-red-600
-      px-4
-      py-2
-      rounded
-      "
-              >
-                Remove
-              </button>
+          {/* Order Summary */}
+          <div className="order-summary">
+            <div className="heading mb-20">Order Summary</div>
+            <div className="summary-row">
+              <span className="summary-label">Subtotal ({itemCount} items)</span>
+              <span className="summary-value">
+                ₹{Number(total).toLocaleString("en-IN")}
+              </span>
+            </div>
+            <div className="summary-row">
+              <span className="summary-label">Delivery</span>
+              <span className="summary-value" style={{ color: "var(--emerald)" }}>
+                Free
+              </span>
+            </div>
+            <div className="summary-row total">
+              <span>Total</span>
+              <span>₹{Number(total).toLocaleString("en-IN")}</span>
+            </div>
+            <button
+              className="btn btn-primary w-full btn-lg mt-16"
+              onClick={handlePlaceOrder}
+            >
+              Proceed to Checkout →
+            </button>
+            <div
+              style={{
+                textAlign: "center",
+                marginTop: "14px",
+                fontSize: "12px",
+                color: "var(--muted)",
+              }}
+            >
+              🔒 Secured by 256-bit SSL encryption
             </div>
           </div>
         </div>
-      ))}
-      <div
-  className="
-  mt-10
-  text-right
-  "
->
-
-  <h2
-    className="
-    text-3xl
-    font-bold
-    "
-  >
-    Total:
-    ₹{total}
-  </h2>
-
- <button
-  onClick={handlePlaceOrder}
-  className="
-  mt-4
-  bg-purple-600
-  px-6
-  py-3
-  rounded-xl
-  "
->
-  Proceed To Checkout
-</button>
-</div>
+      )}
     </div>
   );
 }

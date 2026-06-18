@@ -1,132 +1,87 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../../api/axios";
 import { toast } from "react-hot-toast";
 
 function Register() {
-
   const navigate = useNavigate();
 
-  const [name, setName] =
-    useState("");
+  const [name, setName] = useState("");
 
-  const [email, setEmail] =
-    useState("");
+  const [email, setEmail] = useState("");
 
-  const [password, setPassword] =
-    useState("");
+  const [password, setPassword] = useState("");
 
-  const handleRegister =
-    async (e) => {
+  const handleRegister = async (e) => {
+    e.preventDefault();
 
-      e.preventDefault();
+    try {
+      await api.post("/auth/register", {
+        name,
+        email,
+        password,
+      });
 
-      try {
+      toast.success("Registration Successful");
 
-        await api.post(
-          "/auth/register",
-          {
-            name,
-            email,
-            password
-          }
-        );
-
-        toast.success(
-          "Registration Successful"
-        );
-
-        navigate("/login");
-
-      } catch (error) {
-
-        toast.error(
-          error.response?.data?.message ||
-          "Registration Failed"
-        );
-
-      }
-    };
+      navigate("/login");
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Registration Failed");
+    }
+  };
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <div className="auth-page">
+      <div className="auth-card">
+        <div className="auth-logo">
+          <div className="auth-logo-mark">Ι</div>
+          <div className="auth-title">Create your account</div>
+          <div className="auth-subtitle">Join Intelligent and shop smarter</div>
+        </div>
 
-      <form
-        onSubmit={handleRegister}
-        className="
-        bg-white/5
-        border border-white/10
-        p-8
-        rounded-2xl
-        w-100
-        "
-      >
+        <form className="auth-form" onSubmit={handleRegister}>
+          <div className="form-group">
+            <label className="form-label">Name</label>
+            <input
+              className="form-input"
+              type="text"
+              placeholder="Arjun Kumar"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
 
-        <h1 className="text-3xl font-bold mb-6">
-          Register
-        </h1>
+          <div className="form-group">
+            <label className="form-label">Email address</label>
+            <input
+              className="form-input"
+              type="email"
+              placeholder="you@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
 
-        <input
-          type="text"
-          placeholder="Name"
-          value={name}
-          onChange={(e) =>
-            setName(e.target.value)
-          }
-          className="
-          w-full
-          p-3
-          mb-4
-          rounded-xl
-          bg-[#111827]
-          "
-        />
+          <div className="form-group">
+            <label className="form-label">Password</label>
+            <input
+              className="form-input"
+              type="password"
+              placeholder="Min. 8 characters"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
 
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) =>
-            setEmail(e.target.value)
-          }
-          className="
-          w-full
-          p-3
-          mb-4
-          rounded-xl
-          bg-[#111827]
-          "
-        />
+          <button className="btn btn-primary w-full btn-lg" type="submit">
+            Create Account →
+          </button>
+        </form>
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) =>
-            setPassword(e.target.value)
-          }
-          className="
-          w-full
-          p-3
-          mb-4
-          rounded-xl
-          bg-[#111827]
-          "
-        />
-
-        <button
-          className="
-          w-full
-          bg-purple-600
-          py-3
-          rounded-xl
-          "
-        >
-          Register
-        </button>
-
-      </form>
-
+        <div className="auth-footer">
+          Already have an account? <Link to="/login">Sign in →</Link>
+        </div>
+      </div>
     </div>
   );
 }
