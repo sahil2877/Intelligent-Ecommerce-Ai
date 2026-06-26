@@ -3,6 +3,7 @@ import { useState } from "react";
 
 function Navbar() {
   const [search, setSearch] = useState("");
+  const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
   const isAdmin = user?.role === "admin";
@@ -13,8 +14,15 @@ function Navbar() {
     window.location.href = "/";
   };
 
+  const closeMenu = () => setMenuOpen(false);
+
   const linkClass = ({ isActive }) =>
     "nav-link" + (isActive ? " active" : "");
+
+  const submitSearch = () => {
+    navigate(`/products?search=${search}`);
+    closeMenu();
+  };
 
   return (
     <nav className="global-nav">
@@ -22,7 +30,10 @@ function Navbar() {
         <div
           className="nav-logo"
           style={{ cursor: "pointer" }}
-          onClick={() => navigate("/")}
+          onClick={() => {
+            navigate("/");
+            closeMenu();
+          }}
         >
           <div className="nav-logo-mark">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
@@ -66,42 +77,53 @@ function Navbar() {
             onChange={(e) => setSearch(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
-                navigate(`/products?search=${search}`);
+                submitSearch();
               }
             }}
           />
         </div>
 
-        <div className="nav-links">
-          <NavLink to="/" end className={linkClass}>
+        <button
+          className="nav-toggle"
+          aria-label="Toggle menu"
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen((o) => !o)}
+        >
+          <span className={"nav-toggle-bar" + (menuOpen ? " open" : "")} />
+          <span className={"nav-toggle-bar" + (menuOpen ? " open" : "")} />
+          <span className={"nav-toggle-bar" + (menuOpen ? " open" : "")} />
+        </button>
+
+        <div className={"nav-links" + (menuOpen ? " open" : "")}>
+          <NavLink to="/" end className={linkClass} onClick={closeMenu}>
             Home
           </NavLink>
 
-          <NavLink to="/products" className={linkClass}>
+          <NavLink to="/products" className={linkClass} onClick={closeMenu}>
             Products
           </NavLink>
 
-          <NavLink to="/ai-stylist" className={linkClass}>
+          <NavLink to="/ai-stylist" className={linkClass} onClick={closeMenu}>
             ✦ AI Stylist
           </NavLink>
 
           {user ? (
             <>
               {isAdmin ? (
-                <NavLink to="/dashboard" className={linkClass}>
+                <NavLink to="/dashboard" className={linkClass} onClick={closeMenu}>
                   Dashboard
                 </NavLink>
               ) : (
                 <>
-                  <NavLink to="/wishlist" className={linkClass}>
+                  <NavLink to="/wishlist" className={linkClass} onClick={closeMenu}>
                     ♡ Wishlist
                   </NavLink>
 
-                  <NavLink to="/cart" className={linkClass}>
+                  <NavLink to="/cart" className={linkClass} onClick={closeMenu}>
                     Cart
                   </NavLink>
 
-                  <NavLink to="/orders" className={linkClass}>
+                  <NavLink to="/orders" className={linkClass} onClick={closeMenu}>
                     Orders
                   </NavLink>
                 </>
@@ -110,22 +132,31 @@ function Navbar() {
               <div
                 className="nav-avatar"
                 title={user?.name || "Profile"}
-                onClick={() => navigate("/profile")}
+                onClick={() => {
+                  navigate("/profile");
+                  closeMenu();
+                }}
               >
                 {(user?.name || "U").charAt(0).toUpperCase()}
               </div>
 
-              <button className="nav-link" onClick={handleLogout}>
+              <button
+                className="nav-link"
+                onClick={() => {
+                  handleLogout();
+                  closeMenu();
+                }}
+              >
                 Logout
               </button>
             </>
           ) : (
             <>
-              <NavLink to="/login" className={linkClass}>
+              <NavLink to="/login" className={linkClass} onClick={closeMenu}>
                 Login
               </NavLink>
 
-              <NavLink to="/register" className={linkClass}>
+              <NavLink to="/register" className={linkClass} onClick={closeMenu}>
                 Register
               </NavLink>
             </>
