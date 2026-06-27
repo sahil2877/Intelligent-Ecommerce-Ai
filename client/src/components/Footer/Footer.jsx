@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Sparkles, AtSign, Camera, Globe, Video, Heart } from "lucide-react";
 
 function Footer() {
   return (
@@ -6,38 +7,30 @@ function Footer() {
       <div className="container">
         <div className="footer-grid">
           <div>
-            <div className="nav-logo" style={{ marginBottom: "12px" }}>
+            <div className="nav-logo">
               <div className="nav-logo-mark">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
-                  <path
-                    d="M5.5 8.5h13l-.85 9.4a2.2 2.2 0 0 1-2.2 2H8.55a2.2 2.2 0 0 1-2.2-2L5.5 8.5Z"
-                    stroke="#fff"
-                    strokeWidth="1.8"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M9 8.5V7a3 3 0 0 1 6 0v1.5"
-                    stroke="#fff"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                  />
-                  <path
-                    d="m12 11.4.62 1.63 1.63.62-1.63.62L12 16.5l-.62-1.63-1.63-.62 1.63-.62L12 11.4Z"
-                    fill="#fff"
-                  />
-                </svg>
+                <Sparkles size={18} strokeWidth={2.2} />
               </div>
               Shopwise<span className="nav-logo-ai">AI</span>
             </div>
             <p className="footer-brand-desc">
-              India's most advanced ecommerce experience — combining curated
-              premium products with AI-powered personal shopping.
+              India's most thoughtful shopping experience — premium curation
+              meets an AI personal shopper that actually understands what you
+              want.
             </p>
             <div className="footer-socials mt-24">
-              <div className="footer-social">𝕏</div>
-              <div className="footer-social">in</div>
-              <div className="footer-social">f</div>
-              <div className="footer-social">▶</div>
+              <a className="footer-social" href="#" aria-label="Twitter / X">
+                <AtSign size={18} strokeWidth={1.8} />
+              </a>
+              <a className="footer-social" href="#" aria-label="Instagram">
+                <Camera size={18} strokeWidth={1.8} />
+              </a>
+              <a className="footer-social" href="#" aria-label="Website">
+                <Globe size={18} strokeWidth={1.8} />
+              </a>
+              <a className="footer-social" href="#" aria-label="YouTube">
+                <Video size={18} strokeWidth={1.8} />
+              </a>
             </div>
           </div>
           <div>
@@ -72,7 +65,13 @@ function Footer() {
         </div>
         <div className="footer-bottom">
           <p>© 2025 Shopwise AI Commerce Pvt. Ltd. All rights reserved.</p>
-          <p>Made with ♥ for India</p>
+          <p>
+            Made with{" "}
+            <span className="heart">
+              <Heart size={13} fill="currentColor" strokeWidth={0} />
+            </span>{" "}
+            in India
+          </p>
         </div>
       </div>
     </footer>

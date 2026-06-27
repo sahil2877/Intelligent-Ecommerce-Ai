@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Heart } from "lucide-react";
 import api from "../../api/axios";
 import ProductCard from "../../components/ProductCard/ProductCard";
 
@@ -48,7 +49,9 @@ function Wishlist() {
 
       {wishlist.length === 0 ? (
         <div className="wishlist-empty">
-          <div className="wishlist-empty-icon">♡</div>
+          <div className="wishlist-empty-icon">
+            <Heart size={36} strokeWidth={1.6} />
+          </div>
           <h2 className="heading mb-8">Your wishlist is empty</h2>
           <p className="text-muted">
             Save products you love and find them here later.
@@ -57,7 +60,16 @@ function Wishlist() {
       ) : (
         <div className="grid-4">
           {wishlist.map((item) => (
-            <ProductCard key={item._id} product={item} />
+            <ProductCard
+              key={item._id}
+              product={item}
+              initialWishlisted={true}
+              onWishlistChange={(id, saved) => {
+                if (!saved) {
+                  setWishlist((prev) => prev.filter((p) => p._id !== id));
+                }
+              }}
+            />
           ))}
         </div>
       )}

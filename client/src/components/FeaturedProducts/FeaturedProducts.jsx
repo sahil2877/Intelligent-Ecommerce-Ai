@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
 import api from "../../api/axios";
 import ProductCard from "../ProductCard/ProductCard";
+import { viewportOnce } from "../../lib/motion";
 
 function FeaturedProducts() {
   const [products, setProducts] = useState([]);
@@ -11,7 +14,6 @@ function FeaturedProducts() {
     const fetchProducts = async () => {
       try {
         const res = await api.get("/products");
-
         setProducts(res.data.products);
       } catch (error) {
         console.log(error);
@@ -24,25 +26,24 @@ function FeaturedProducts() {
   return (
     <section className="section">
       <div className="container">
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "flex-end",
-            marginBottom: "32px",
-          }}
+        <motion.div
+          className="section-head"
+          initial={{ opacity: 0, y: 18 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={viewportOnce}
+          transition={{ duration: 0.5 }}
         >
           <div>
-            <div className="eyebrow">Handpicked</div>
-            <h2 className="display-md">Featured Products</h2>
+            <div className="eyebrow">The edit</div>
+            <h2 className="display-md">Featured this week</h2>
           </div>
           <button
             className="btn btn-ghost btn-sm"
             onClick={() => navigate("/products")}
           >
-            View all →
+            View all <ArrowRight size={15} />
           </button>
-        </div>
+        </motion.div>
 
         <div className="grid-4">
           {products.slice(0, 8).map((product) => (

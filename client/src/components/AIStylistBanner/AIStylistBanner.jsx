@@ -1,65 +1,56 @@
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { Sparkles, ArrowRight } from "lucide-react";
+import { viewportOnce } from "../../lib/motion";
 
 function AIStylistBanner() {
   const navigate = useNavigate();
 
+  const prompts = [
+    "Best noise-cancelling headphones under ₹20k",
+    "A camera for travel under ₹40k",
+    "Smart TV for the bedroom, 43 inch",
+  ];
+
   return (
     <section className="section-sm">
       <div className="container">
-        <div
-          style={{
-            background:
-              "linear-gradient(135deg,rgba(99,102,241,.12) 0%,rgba(167,139,250,.08) 100%)",
-            border: "1px solid rgba(99,102,241,.2)",
-            borderRadius: "var(--radius-xl)",
-            padding: "48px",
-            textAlign: "center",
-            position: "relative",
-            overflow: "hidden",
-          }}
+        <motion.div
+          className="ai-banner"
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={viewportOnce}
+          transition={{ duration: 0.6 }}
         >
-          <div
-            style={{
-              position: "absolute",
-              top: "-60px",
-              right: "-60px",
-              width: "240px",
-              height: "240px",
-              borderRadius: "50%",
-              background:
-                "radial-gradient(circle,rgba(99,102,241,.2),transparent 70%)",
-              pointerEvents: "none",
-            }}
-          ></div>
-          <div style={{ fontSize: "40px", marginBottom: "16px" }}>✦</div>
-          <h2 className="display-md mb-16">Tell Us What You Need</h2>
+          <div className="ai-banner-orb">
+            <Sparkles size={26} strokeWidth={2} />
+          </div>
+          <h2 className="display-md mb-16">Tell us what you need</h2>
           <p
             className="subheading"
-            style={{ maxWidth: "480px", margin: "0 auto 28px" }}
+            style={{ maxWidth: "520px", margin: "0 auto 28px" }}
           >
-            "I need a gaming laptop under ₹80,000 for college" — and our AI finds
-            the perfect match for you instantly.
+            Describe it in your own words — our AI stylist reads between the
+            lines and finds the match. No endless scrolling, no guesswork.
           </p>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              gap: "8px",
-              flexWrap: "wrap",
-              marginBottom: "28px",
-            }}
-          >
-            <span className="ai-chip">"Best noise-cancelling headphones"</span>
-            <span className="ai-chip">"Camera for travel under ₹40k"</span>
-            <span className="ai-chip">"Smart TV for bedroom 43 inch"</span>
+          <div className="ai-banner-chips">
+            {prompts.map((p) => (
+              <button
+                key={p}
+                className="ai-chip"
+                onClick={() => navigate("/ai-stylist")}
+              >
+                {p}
+              </button>
+            ))}
           </div>
           <button
-            className="btn btn-primary btn-lg"
+            className="btn btn-primary btn-lg mt-24"
             onClick={() => navigate("/ai-stylist")}
           >
-            Try AI Stylist →
+            <Sparkles size={17} /> Try the AI Stylist <ArrowRight size={16} />
           </button>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

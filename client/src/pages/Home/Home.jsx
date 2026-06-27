@@ -1,40 +1,60 @@
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import {
+  Laptop,
+  Smartphone,
+  Headphones,
+  Gamepad2,
+  Camera,
+  Watch,
+  ArrowRight,
+  Sparkles,
+} from "lucide-react";
 import Hero from "../../components/Hero/Hero";
 import FeaturedProducts from "../../components/FeaturedProducts/FeaturedProducts";
 import AIStylistBanner from "../../components/AIStylistBanner/AIStylistBanner";
+import Stars from "../../components/ui/Stars";
+import { viewportOnce } from "../../lib/motion";
 
 const categories = [
-  { icon: "💻", name: "Laptops", count: "1,240 items", bg: "rgba(99,102,241,.15)" },
-  { icon: "📱", name: "Smartphones", count: "3,860 items", bg: "rgba(16,185,129,.15)" },
-  { icon: "🎧", name: "Audio", count: "820 items", bg: "rgba(245,158,11,.15)" },
-  { icon: "🎮", name: "Gaming", count: "2,140 items", bg: "rgba(167,139,250,.15)" },
-  { icon: "📷", name: "Cameras", count: "460 items", bg: "rgba(244,63,94,.15)" },
-  { icon: "⌚", name: "Wearables", count: "980 items", bg: "rgba(6,182,212,.15)" },
+  { Icon: Laptop, name: "Laptops", count: "1,240 items" },
+  { Icon: Smartphone, name: "Smartphones", count: "3,860 items" },
+  { Icon: Headphones, name: "Audio", count: "820 items" },
+  { Icon: Gamepad2, name: "Gaming", count: "2,140 items" },
+  { Icon: Camera, name: "Cameras", count: "460 items" },
+  { Icon: Watch, name: "Wearables", count: "980 items" },
 ];
 
 const testimonials = [
   {
     initials: "AK",
     quote:
-      "The AI Stylist is genuinely mind-blowing. I just said \"gaming setup under 1 lakh\" and it recommended exactly what I needed. Saved me hours of research.",
+      "I just said “gaming setup under 1 lakh” and it recommended exactly what I needed. Saved me hours of research.",
     name: "Arjun Kumar",
     role: "Software Engineer, Bengaluru",
   },
   {
     initials: "PS",
     quote:
-      "Ordered a Sony camera on Tuesday, received it Thursday. The packaging was immaculate and the product was exactly as described. Will never shop anywhere else.",
+      "Ordered a Sony camera on Tuesday, received it Thursday. Immaculate packaging, exactly as described. Never shopping anywhere else.",
     name: "Priya Sharma",
     role: "Photographer, Mumbai",
   },
   {
     initials: "RV",
     quote:
-      "The design of this website is stunning — it actually feels like using an Apple product. Smooth, fast, and every detail is perfect. 10/10 would recommend.",
+      "The whole experience feels considered — smooth, fast, every detail in its place. It's the rare store that feels genuinely premium.",
     name: "Rahul Verma",
     role: "UX Designer, Delhi",
   },
 ];
+
+const fade = {
+  initial: { opacity: 0, y: 22 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: viewportOnce,
+  transition: { duration: 0.55 },
+};
 
 function Home() {
   const navigate = useNavigate();
@@ -46,38 +66,36 @@ function Home() {
       {/* CATEGORIES */}
       <section className="section-sm">
         <div className="container">
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "flex-end",
-              marginBottom: "28px",
-            }}
-          >
+          <motion.div className="section-head" {...fade}>
             <div>
-              <div className="eyebrow">Shop by Category</div>
-              <h2 className="display-md">Find What You Need</h2>
+              <div className="eyebrow">Browse</div>
+              <h2 className="display-md">Shop by category</h2>
             </div>
             <button
               className="btn btn-ghost btn-sm"
               onClick={() => navigate("/products")}
             >
-              View all →
+              View all <ArrowRight size={15} />
             </button>
-          </div>
+          </motion.div>
+
           <div className="category-grid">
-            {categories.map((cat) => (
-              <div
-                key={cat.name}
+            {categories.map(({ Icon, name, count }, i) => (
+              <motion.div
+                key={name}
                 className="category-card"
                 onClick={() => navigate("/products")}
+                initial={{ opacity: 0, y: 18 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={viewportOnce}
+                transition={{ duration: 0.4, delay: i * 0.05 }}
               >
-                <div className="category-icon" style={{ background: cat.bg }}>
-                  {cat.icon}
+                <div className="category-icon">
+                  <Icon size={26} strokeWidth={1.7} />
                 </div>
-                <div className="category-name">{cat.name}</div>
-                <div className="category-count">{cat.count}</div>
-              </div>
+                <div className="category-name">{name}</div>
+                <div className="category-count">{count}</div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -86,35 +104,37 @@ function Home() {
       {/* FEATURED BANNER */}
       <section className="section-sm">
         <div className="container">
-          <div className="featured-banner">
+          <motion.div className="featured-banner" {...fade}>
             <div>
-              <div className="badge badge-primary mb-12">New Arrival</div>
+              <div className="badge badge-primary mb-12">New arrival</div>
               <h2 className="display-md mb-16">
-                Premium Tech
+                Premium tech,
                 <br />
-                <span className="grad-text-primary">Redefine Possible</span>
+                <span className="grad-text-primary">made personal</span>
               </h2>
               <p className="subheading mb-24" style={{ maxWidth: "420px" }}>
-                Discover the latest flagship devices, curated and recommended by
-                our AI — built for developers, creators, and visionaries.
+                Discover the latest flagship devices — hand-selected and
+                recommended by our AI for developers, creators, and visionaries.
               </p>
-              <div style={{ display: "flex", gap: "12px" }}>
+              <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
                 <button
                   className="btn btn-primary"
                   onClick={() => navigate("/products")}
                 >
-                  Shop Now
+                  Shop now <ArrowRight size={16} />
                 </button>
                 <button
                   className="btn btn-ghost"
                   onClick={() => navigate("/ai-stylist")}
                 >
-                  Ask AI Stylist
+                  <Sparkles size={16} /> Ask AI Stylist
                 </button>
               </div>
             </div>
-            <div className="featured-banner-img">💻</div>
-          </div>
+            <div className="featured-banner-img">
+              <Laptop strokeWidth={1.1} />
+            </div>
+          </motion.div>
         </div>
       </section>
 
@@ -125,16 +145,29 @@ function Home() {
       {/* TESTIMONIALS */}
       <section className="section">
         <div className="container">
-          <div style={{ textAlign: "center", marginBottom: "48px" }}>
+          <motion.div
+            style={{ textAlign: "center", marginBottom: "48px" }}
+            {...fade}
+          >
             <div className="eyebrow" style={{ justifyContent: "center" }}>
-              Loved by Thousands
+              Loved by thousands
             </div>
-            <h2 className="display-md">What Our Customers Say</h2>
-          </div>
+            <h2 className="display-md">What our customers say</h2>
+          </motion.div>
+
           <div className="grid-3">
-            {testimonials.map((t) => (
-              <div key={t.initials} className="testimonial-card">
-                <div className="stars mb-12">★★★★★</div>
+            {testimonials.map((t, i) => (
+              <motion.div
+                key={t.initials}
+                className="testimonial-card"
+                initial={{ opacity: 0, y: 22 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={viewportOnce}
+                transition={{ duration: 0.5, delay: i * 0.08 }}
+              >
+                <div className="mb-12">
+                  <Stars value={5} size={15} />
+                </div>
                 <p className="testimonial-quote">{t.quote}</p>
                 <div className="testimonial-author">
                   <div className="testimonial-avatar">{t.initials}</div>
@@ -143,7 +176,7 @@ function Home() {
                     <div className="testimonial-role">{t.role}</div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>

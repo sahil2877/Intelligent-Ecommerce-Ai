@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { ClipboardList } from "lucide-react";
 import api from "../../api/axios";
 
 const statusBadge = {
@@ -39,7 +40,9 @@ function Orders() {
 
       {orders.length === 0 ? (
         <div className="wishlist-empty">
-          <div className="wishlist-empty-icon">📋</div>
+          <div className="wishlist-empty-icon">
+            <ClipboardList size={36} strokeWidth={1.6} />
+          </div>
           <h2 className="heading mb-8">No orders yet</h2>
           <p className="text-muted">Your placed orders will appear here.</p>
         </div>

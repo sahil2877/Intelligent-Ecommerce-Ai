@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { User, LayoutDashboard, Package, Heart, LogOut } from "lucide-react";
 import api from "../../api/axios";
 
 function Profile() {
@@ -61,14 +62,20 @@ function Profile() {
           </div>
           <div className="divider"></div>
           <div className="profile-nav-link active">
-            <span className="profile-nav-icon">👤</span> Personal Info
+            <span className="profile-nav-icon">
+              <User size={18} />
+            </span>{" "}
+            Personal Info
           </div>
           {isAdmin ? (
             <div
               className="profile-nav-link"
               onClick={() => navigate("/dashboard")}
             >
-              <span className="profile-nav-icon">📊</span> Dashboard
+              <span className="profile-nav-icon">
+                <LayoutDashboard size={18} />
+              </span>{" "}
+              Dashboard
             </div>
           ) : (
             <>
@@ -76,23 +83,32 @@ function Profile() {
                 className="profile-nav-link"
                 onClick={() => navigate("/orders")}
               >
-                <span className="profile-nav-icon">📦</span> My Orders
+                <span className="profile-nav-icon">
+                  <Package size={18} />
+                </span>{" "}
+                My Orders
               </div>
               <div
                 className="profile-nav-link"
                 onClick={() => navigate("/wishlist")}
               >
-                <span className="profile-nav-icon">♡</span> Wishlist
+                <span className="profile-nav-icon">
+                  <Heart size={18} />
+                </span>{" "}
+                Wishlist
               </div>
             </>
           )}
           <div className="divider"></div>
           <div
             className="profile-nav-link"
-            style={{ color: "var(--rose)" }}
+            style={{ color: "var(--berry)" }}
             onClick={handleLogout}
           >
-            <span className="profile-nav-icon">→</span> Sign Out
+            <span className="profile-nav-icon">
+              <LogOut size={18} />
+            </span>{" "}
+            Sign Out
           </div>
         </div>
 

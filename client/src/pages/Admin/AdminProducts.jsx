@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { Plus, Pencil, Trash2, ShoppingBag } from "lucide-react";
 import api from "../../api/axios";
 
 function AdminProducts() {
@@ -53,7 +54,7 @@ function AdminProducts() {
           </div>
         </div>
         <Link to="/admin/add-product" className="btn btn-primary">
-          + Add New Product
+          <Plus size={16} strokeWidth={1.8} /> Add New Product
         </Link>
       </div>
 
@@ -85,7 +86,7 @@ function AdminProducts() {
                       {product.images?.[0] ? (
                         <img src={product.images[0]} alt={product.title} />
                       ) : (
-                        <span>🛍️</span>
+                        <ShoppingBag size={18} strokeWidth={1.8} />
                       )}
                     </div>
                     <div>
@@ -107,7 +108,7 @@ function AdminProducts() {
                       to={`/admin/edit-product/${product._id}`}
                       className="btn btn-ghost btn-sm"
                     >
-                      Edit
+                      <Pencil size={15} strokeWidth={1.8} /> Edit
                     </Link>
                     <button
                       className="btn btn-danger btn-sm"
@@ -117,7 +118,7 @@ function AdminProducts() {
                         }
                       }}
                     >
-                      Delete
+                      <Trash2 size={15} strokeWidth={1.8} /> Delete
                     </button>
                   </div>
                 </td>

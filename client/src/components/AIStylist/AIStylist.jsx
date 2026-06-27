@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Sparkles, Send } from "lucide-react";
 import api from "../../api/axios";
 import ProductCard from "../ProductCard/ProductCard";
 
@@ -45,7 +46,9 @@ console.log(error.response?.data);
     <div className="ai-page">
       <div className="container">
         <div className="ai-hero">
-          <div className="ai-orb">✦</div>
+          <div className="ai-orb">
+            <Sparkles size={32} strokeWidth={2} />
+          </div>
           <div className="eyebrow" style={{ justifyContent: "center" }}>
             Shopwise AI Stylist
           </div>
@@ -61,9 +64,9 @@ console.log(error.response?.data);
 
         <div className="ai-terminal">
           <div className="ai-terminal-bar">
-            <div className="terminal-dot" style={{ background: "#F43F5E" }}></div>
-            <div className="terminal-dot" style={{ background: "#F59E0B" }}></div>
-            <div className="terminal-dot" style={{ background: "#10B981" }}></div>
+            <div className="terminal-dot" style={{ background: "var(--berry)" }}></div>
+            <div className="terminal-dot" style={{ background: "var(--gold)" }}></div>
+            <div className="terminal-dot" style={{ background: "var(--sage)" }}></div>
             <span
               style={{
                 marginLeft: "8px",
@@ -78,10 +81,10 @@ console.log(error.response?.data);
               style={{
                 marginLeft: "auto",
                 fontSize: "11px",
-                color: "var(--emerald)",
-                background: "rgba(16,185,129,.1)",
+                color: "var(--sage)",
+                background: "rgba(151,164,124,.12)",
                 padding: "2px 8px",
-                borderRadius: "4px",
+                borderRadius: "100px",
               }}
             >
               ● Online
@@ -90,7 +93,9 @@ console.log(error.response?.data);
 
           <div className="ai-chat">
             <div className="ai-msg assistant">
-              <div className="ai-msg-avatar">✦</div>
+              <div className="ai-msg-avatar">
+                <Sparkles size={16} strokeWidth={2.2} />
+              </div>
               <div className="ai-msg-bubble">
                 Hello! I'm your personal AI Shopping Stylist. Tell me what you're
                 looking for — include your budget, use case, or any preferences —
@@ -112,7 +117,9 @@ console.log(error.response?.data);
 
             {loading && (
               <div className="ai-msg assistant">
-                <div className="ai-msg-avatar">✦</div>
+                <div className="ai-msg-avatar">
+                <Sparkles size={16} strokeWidth={2.2} />
+              </div>
                 <div className="ai-typing">
                   <div className="ai-typing-dot"></div>
                   <div className="ai-typing-dot"></div>
@@ -123,7 +130,9 @@ console.log(error.response?.data);
 
             {!loading && response && (
               <div className="ai-msg assistant">
-                <div className="ai-msg-avatar">✦</div>
+                <div className="ai-msg-avatar">
+                <Sparkles size={16} strokeWidth={2.2} />
+              </div>
                 <div
                   className="ai-msg-bubble"
                   style={{ whiteSpace: "pre-wrap" }}
@@ -152,8 +161,9 @@ console.log(error.response?.data);
               className="ai-send"
               onClick={handleAskAI}
               disabled={loading}
+              aria-label="Send"
             >
-              ➤
+              <Send size={18} strokeWidth={2} />
             </button>
           </div>
         </div>
@@ -177,8 +187,11 @@ console.log(error.response?.data);
           <div className="ai-results">
             <div className="ai-results-header">
               <div className="ai-results-line"></div>
-              <div className="ai-results-label">
-                ✦ {products.length} AI Recommendations
+              <div
+                className="ai-results-label"
+                style={{ display: "inline-flex", alignItems: "center", gap: "7px" }}
+              >
+                <Sparkles size={14} /> {products.length} AI Recommendations
               </div>
               <div className="ai-results-line"></div>
             </div>

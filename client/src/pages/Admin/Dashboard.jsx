@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Users, Package, ShoppingCart, IndianRupee } from "lucide-react";
 import api from "../../api/axios";
 
 function Dashboard() {
@@ -26,25 +27,25 @@ function Dashboard() {
 
   const kpis = [
     {
-      icon: "👥",
-      bg: "rgba(99,102,241,.15)",
+      icon: Users,
+      bg: "rgba(16,185,129,.15)",
       label: "Total Users",
       value: stats?.totalUsers ?? "—",
     },
     {
-      icon: "🏷",
+      icon: Package,
       bg: "rgba(16,185,129,.15)",
       label: "Total Products",
       value: stats?.totalProducts ?? "—",
     },
     {
-      icon: "📦",
+      icon: ShoppingCart,
       bg: "rgba(245,158,11,.15)",
       label: "Total Orders",
       value: stats?.totalOrders ?? "—",
     },
     {
-      icon: "💰",
+      icon: IndianRupee,
       bg: "rgba(244,63,94,.15)",
       label: "Total Revenue",
       value:
@@ -66,7 +67,7 @@ function Dashboard() {
         <div>
           <div className="admin-page-title">Dashboard</div>
           <div className="admin-breadcrumb">
-            Welcome back, Admin 👋 — Here's what's happening today
+            Welcome back, Admin — Here's what's happening today
           </div>
         </div>
       </div>
@@ -76,7 +77,7 @@ function Dashboard() {
         {kpis.map((k) => (
           <div className="kpi-card" key={k.label}>
             <div className="kpi-icon" style={{ background: k.bg }}>
-              {k.icon}
+              <k.icon size={19} strokeWidth={1.8} />
             </div>
             <div className="kpi-label">{k.label}</div>
             <div className="kpi-value">{k.value}</div>

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Plus, ArrowRight } from "lucide-react";
 import api from "../../api/axios";
 
 function AddProduct() {
@@ -78,7 +79,7 @@ function AddProduct() {
           </div>
         </div>
         <button type="submit" className="btn btn-primary">
-          Publish Product
+          <Plus size={16} strokeWidth={1.8} /> Publish Product
         </button>
       </div>
 
@@ -177,7 +178,7 @@ function AddProduct() {
           </div>
 
           <button type="submit" className="btn btn-primary w-full">
-            Publish Product →
+            Publish Product <ArrowRight size={16} strokeWidth={1.8} />
           </button>
         </div>
       </div>

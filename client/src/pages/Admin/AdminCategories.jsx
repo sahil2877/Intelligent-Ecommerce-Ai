@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Tag, Pencil, Trash2 } from "lucide-react";
 import api from "../../api/axios";
 import { toast } from "react-hot-toast";
 
@@ -102,7 +103,9 @@ function AdminCategories() {
               categories.map((category) => (
                 <div className="category-row" key={category._id}>
                   <div className="category-info">
-                    <div className="category-icon-sm">🗂</div>
+                    <div className="category-icon-sm">
+                      <Tag size={16} strokeWidth={1.8} />
+                    </div>
                     <div>
                       <div
                         style={{
@@ -125,13 +128,13 @@ function AdminCategories() {
                       className="btn btn-ghost btn-sm"
                       onClick={() => handleEdit(category)}
                     >
-                      Edit
+                      <Pencil size={15} strokeWidth={1.8} /> Edit
                     </button>
                     <button
                       className="btn btn-danger btn-sm"
                       onClick={() => handleDelete(category._id)}
                     >
-                      Delete
+                      <Trash2 size={15} strokeWidth={1.8} /> Delete
                     </button>
                   </div>
                 </div>

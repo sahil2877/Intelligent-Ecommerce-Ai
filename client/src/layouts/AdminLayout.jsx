@@ -1,12 +1,21 @@
 import { NavLink, Navigate, useNavigate } from "react-router-dom";
+import {
+  LayoutDashboard,
+  Package,
+  Plus,
+  Tags,
+  ShoppingCart,
+  User,
+  LogOut,
+} from "lucide-react";
 
 const adminNav = [
-  { to: "/dashboard", icon: "📊", label: "Dashboard", end: true },
-  { to: "/admin/products", icon: "🏷", label: "Products Management" },
-  { to: "/admin/add-product", icon: "➕", label: "Add Product" },
-  { to: "/admin/categories", icon: "🗂", label: "Categories" },
-  { to: "/admin/orders", icon: "📦", label: "Orders Management" },
-  { to: "/profile", icon: "👤", label: "Profile" },
+  { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard", end: true },
+  { to: "/admin/products", icon: Package, label: "Products Management" },
+  { to: "/admin/add-product", icon: Plus, label: "Add Product" },
+  { to: "/admin/categories", icon: Tags, label: "Categories" },
+  { to: "/admin/orders", icon: ShoppingCart, label: "Orders Management" },
+  { to: "/profile", icon: User, label: "Profile" },
 ];
 
 function AdminLayout({ children }) {
@@ -50,18 +59,24 @@ function AdminLayout({ children }) {
         </div>
 
         <div className="admin-sidebar-section">
-          {adminNav.map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              end={item.end}
-              className={({ isActive }) =>
-                "admin-nav-link" + (isActive ? " active" : "")
-              }
-            >
-              <span className="admin-nav-icon">{item.icon}</span> {item.label}
-            </NavLink>
-          ))}
+          {adminNav.map((item) => {
+            const Icon = item.icon;
+            return (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                end={item.end}
+                className={({ isActive }) =>
+                  "admin-nav-link" + (isActive ? " active" : "")
+                }
+              >
+                <span className="admin-nav-icon">
+                  <Icon size={18} strokeWidth={1.8} />
+                </span>{" "}
+                {item.label}
+              </NavLink>
+            );
+          })}
         </div>
 
         <div className="admin-sidebar-section">
@@ -70,7 +85,10 @@ function AdminLayout({ children }) {
             style={{ color: "var(--rose)" }}
             onClick={handleLogout}
           >
-            <span className="admin-nav-icon">→</span> Sign Out
+            <span className="admin-nav-icon">
+              <LogOut size={18} strokeWidth={1.8} />
+            </span>{" "}
+            Sign Out
           </div>
         </div>
       </aside>

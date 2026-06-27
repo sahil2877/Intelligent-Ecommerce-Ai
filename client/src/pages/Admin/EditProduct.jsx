@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { TriangleAlert, ArrowRight } from "lucide-react";
 import api from "../../api/axios";
 
 function EditProduct() {
@@ -95,10 +96,13 @@ function EditProduct() {
           marginBottom: "24px",
           fontSize: "13px",
           color: "var(--amber)",
+          display: "flex",
+          alignItems: "center",
+          gap: "8px",
         }}
       >
-        ⚠️ You are editing a live product. Changes will be visible immediately on
-        the storefront.
+        <TriangleAlert size={16} strokeWidth={1.8} /> You are editing a live
+        product. Changes will be visible immediately on the storefront.
       </div>
 
       <div className="product-form-layout">
@@ -172,7 +176,7 @@ function EditProduct() {
             </p>
           </div>
           <button type="submit" className="btn btn-primary w-full">
-            Save Changes →
+            Save Changes <ArrowRight size={16} strokeWidth={1.8} />
           </button>
         </div>
       </div>
