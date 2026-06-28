@@ -4,6 +4,7 @@ import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { SlidersHorizontal, X, Search } from "lucide-react";
 import api from "../../api/axios";
 import ProductCard from "../../components/ProductCard/ProductCard";
+import useDocumentTitle from "../../lib/useDocumentTitle";
 
 function Products() {
   const location = useLocation();
@@ -14,7 +15,13 @@ function Products() {
   const [search, setSearch] = useState(searchQuery);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [sortBy, setSortBy] = useState("popular");
   const [filtersOpen, setFiltersOpen] = useState(false);
+
+  useDocumentTitle(
+    "Shop all products · Shopwise AI",
+    "Browse premium tech and fashion, hand-picked and curated by Shopwise AI.",
+  );
 
   useEffect(() => {
     setSearch(searchQuery);
@@ -57,6 +64,21 @@ function Products() {
       selectedCategory === "All" ||
       product.category?.name === selectedCategory;
     return matchesSearch && matchesCategory;
+  });
+
+  const sorted = [...filtered].sort((a, b) => {
+    switch (sortBy) {
+      case "lowhigh":
+        return a.price - b.price;
+      case "highlow":
+        return b.price - a.price;
+      case "newest":
+        return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
+      case "rating":
+        return (b.averageRating || 0) - (a.averageRating || 0);
+      default:
+        return 0;
+    }
   });
 
   const clearAll = () => {
@@ -126,6 +148,10 @@ function Products() {
         </span>
       </div>
 
+      <h1 className="display-md mb-24">
+        {selectedCategory === "All" ? "All products" : selectedCategory}
+      </h1>
+
       <div className="listing-layout">
         {/* DESKTOP FILTERS */}
         <aside className="filter-panel">
@@ -155,23 +181,39 @@ function Products() {
               >
                 <SlidersHorizontal size={15} /> Filters
               </button>
-              <span style={{ fontSize: "13px", color: "var(--muted)" }}>
+              <label
+                htmlFor="sort"
+                style={{ fontSize: "13px", color: "var(--muted)" }}
+              >
                 Sort:
-              </span>
-              <select className="sort-select">
-                <option>Popularity</option>
-                <option>Price: Low to High</option>
-                <option>Price: High to Low</option>
-                <option>Newest First</option>
+              </label>
+              <select
+                id="sort"
+                className="sort-select"
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+              >
+                <option value="popular">Popularity</option>
+                <option value="lowhigh">Price: Low to High</option>
+                <option value="highlow">Price: High to Low</option>
+                <option value="newest">Newest First</option>
+                <option value="rating">Top Rated</option>
               </select>
             </div>
           </div>
 
-          <div className="grid-3">
-            {filtered.map((product) => (
-              <ProductCard key={product._id} product={product} />
-            ))}
-          </div>
+          {sorted.length === 0 ? (
+            <div className="wishlist-empty">
+              <h2 className="heading mb-8">No products found</h2>
+              <p className="text-muted">Try a different search or category.</p>
+            </div>
+          ) : (
+            <div className="grid-3">
+              {sorted.map((product) => (
+                <ProductCard key={product._id} product={product} />
+              ))}
+            </div>
+          )}
         </div>
       </div>
 

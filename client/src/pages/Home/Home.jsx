@@ -15,6 +15,7 @@ import FeaturedProducts from "../../components/FeaturedProducts/FeaturedProducts
 import AIStylistBanner from "../../components/AIStylistBanner/AIStylistBanner";
 import Stars from "../../components/ui/Stars";
 import { viewportOnce } from "../../lib/motion";
+import useDocumentTitle from "../../lib/useDocumentTitle";
 
 const categories = [
   { Icon: Laptop, name: "Laptops", count: "1,240 items" },
@@ -58,6 +59,10 @@ const fade = {
 
 function Home() {
   const navigate = useNavigate();
+  useDocumentTitle(
+    "Shopwise AI — Smarter shopping, powered by AI",
+    "Premium tech and fashion, hand-picked by an AI personal shopper. Curated for the way you actually shop.",
+  );
 
   return (
     <>

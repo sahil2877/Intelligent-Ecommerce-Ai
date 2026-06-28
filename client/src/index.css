@@ -186,7 +186,7 @@ ul { list-style: none; }
 }
 .nav-scrim {
   position: fixed; inset: 0; z-index: 200;
-  background: rgba(8,7,5,.6); backdrop-filter: blur(2px);
+  background: rgba(8,7,5,.6); -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px);
 }
 .nav-drawer {
   position: fixed; top: 0; right: 0; bottom: 0; z-index: 201;
@@ -467,7 +467,7 @@ ul { list-style: none; }
 .hero-chip {
   position: absolute; z-index: 2;
   display: inline-flex; align-items: center; gap: 9px;
-  background: rgba(22,19,14,.82); backdrop-filter: blur(10px);
+  background: rgba(22,19,14,.82); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
   border: 1px solid var(--border-med); border-radius: 100px;
   padding: 9px 15px; font-size: 13px; font-weight: 600; color: var(--cream);
   box-shadow: var(--shadow);
@@ -531,7 +531,7 @@ ul { list-style: none; }
   position: absolute; z-index: 4; top: 50%; transform: translateY(-50%);
   width: 48px; height: 48px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  background: rgba(22,19,14,.55); backdrop-filter: blur(8px);
+  background: rgba(22,19,14,.55); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
   border: 1px solid var(--border-med); color: var(--cream);
   transition: background .2s, transform .2s;
 }
@@ -599,7 +599,7 @@ ul { list-style: none; }
 .product-wishlist {
   position: absolute; top: 12px; right: 12px; z-index: 2;
   width: 38px; height: 38px; border-radius: 50%;
-  background: rgba(17,15,12,.55); backdrop-filter: blur(8px);
+  background: rgba(17,15,12,.55); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
   border: 1px solid var(--border-med); display: flex; align-items: center;
   justify-content: center; color: var(--sand); transition: all .2s;
   cursor: pointer;
@@ -765,7 +765,7 @@ ul { list-style: none; }
 }
 /* mobile filter trigger + drawer (hidden on desktop) */
 .filter-trigger { display: none; }
-.filter-drawer-scrim { position: fixed; inset: 0; z-index: 200; background: rgba(8,7,5,.6); backdrop-filter: blur(2px); }
+.filter-drawer-scrim { position: fixed; inset: 0; z-index: 200; background: rgba(8,7,5,.6); -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px); }
 .filter-drawer {
   position: fixed; bottom: 0; left: 0; right: 0; z-index: 201;
   max-height: 85vh; overflow-y: auto;

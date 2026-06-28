@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /dashboard
+Disallow: /checkout
+Disallow: /profile
+
+Sitemap: https://shopwise-ai.example.com/sitemap.xml

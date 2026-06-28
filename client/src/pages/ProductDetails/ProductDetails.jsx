@@ -13,6 +13,7 @@ import {
 import api from "../../api/axios";
 import { toast } from "react-hot-toast";
 import Stars from "../../components/ui/Stars";
+import useDocumentTitle from "../../lib/useDocumentTitle";
 
 function ProductDetails() {
   const [reviews, setReviews] = useState([]);
@@ -94,6 +95,49 @@ function ProductDetails() {
     fetchProduct();
     fetchReviews();
   }, [id]);
+
+  useDocumentTitle(
+    product ? `${product.title} · Shopwise AI` : "Product · Shopwise AI",
+    product?.description?.slice(0, 155),
+  );
+
+  // Product structured data (rich results) — injected/removed via the DOM,
+  // no dangerouslySetInnerHTML needed.
+  useEffect(() => {
+    if (!product) return;
+    const ld = {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      name: product.title,
+      description: product.description,
+      image: product.images?.[0],
+      brand: product.brand
+        ? { "@type": "Brand", name: product.brand }
+        : undefined,
+      aggregateRating:
+        product.averageRating > 0
+          ? {
+              "@type": "AggregateRating",
+              ratingValue: Number(product.averageRating).toFixed(1),
+              reviewCount: reviews.length || 1,
+            }
+          : undefined,
+      offers: {
+        "@type": "Offer",
+        priceCurrency: "INR",
+        price: product.price,
+        availability:
+          product.stock > 0
+            ? "https://schema.org/InStock"
+            : "https://schema.org/OutOfStock",
+      },
+    };
+    const script = document.createElement("script");
+    script.type = "application/ld+json";
+    script.text = JSON.stringify(ld);
+    document.head.appendChild(script);
+    return () => document.head.removeChild(script);
+  }, [product, reviews.length]);
 
   if (loading) {
     return (

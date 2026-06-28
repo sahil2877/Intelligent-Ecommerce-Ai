@@ -6,12 +6,14 @@ const router = express.Router();
 const {
     registerUser,
     loginUser,
-    getProfile
+    getProfile,
+    logoutUser
 } = require("../controllers/authController");
 
 router.post("/register", registerUser);
 router.get("/profile", protect, getProfile);
 
 router.post("/login", loginUser);
+router.post("/logout", logoutUser);
 
 module.exports = router;

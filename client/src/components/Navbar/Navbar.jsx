@@ -1,6 +1,7 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import api from "../../api/axios";
 import {
   Search,
   Heart,
@@ -43,7 +44,12 @@ function Navbar() {
     };
   }, [menuOpen]);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      await api.post("/auth/logout");
+    } catch {
+      // Ignore network errors — clear the client session regardless.
+    }
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     window.location.href = "/";

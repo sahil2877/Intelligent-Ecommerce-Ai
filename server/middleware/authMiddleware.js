@@ -3,15 +3,17 @@ const User = require("../models/User");
 
 const protect = async (req, res, next) => {
   try {
+    // Prefer the httpOnly cookie; fall back to the Authorization header.
     const authHeader = req.headers.authorization;
+    const token =
+      req.cookies?.token ||
+      (authHeader?.startsWith("Bearer ") ? authHeader.split(" ")[1] : null);
 
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    if (!token) {
       return res.status(401).json({
         message: "Not authorized",
       });
     }
-
-    const token = authHeader.split(" ")[1];
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 

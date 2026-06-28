@@ -58,6 +58,15 @@ function ProductCard({ product, initialWishlisted = false, onWishlistChange }) {
     <motion.div
       className="product-card"
       onClick={goToProduct}
+      role="link"
+      tabIndex={0}
+      aria-label={`${product.title}, ₹${Number(product.price).toLocaleString("en-IN")}`}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          goToProduct();
+        }
+      }}
       initial={{ opacity: 0, y: reduce ? 0 : 22 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={viewportOnce}

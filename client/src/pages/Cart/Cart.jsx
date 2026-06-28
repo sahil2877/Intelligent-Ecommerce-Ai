@@ -1,85 +1,63 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 import { ShoppingBag, ImageOff, Minus, Plus, Trash2, Lock, ArrowRight } from "lucide-react";
 import api from "../../api/axios";
+import useDocumentTitle from "../../lib/useDocumentTitle";
 
 function Cart() {
+  useDocumentTitle("Your Cart · Shopwise AI");
+  const navigate = useNavigate();
   const [cart, setCart] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [updating, setUpdating] = useState(false);
+
+  const fetchCart = async () => {
+    try {
+      const res = await api.get("/cart");
+      setCart(res.data.cart);
+    } catch (error) {
+      toast.error("Could not load your cart");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchCart = async () => {
-      try {
-        const token = localStorage.getItem("token");
-
-        const res = await api.get("/cart", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        setCart(res.data.cart);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
+    if (!localStorage.getItem("token")) {
+      setLoading(false);
+      return;
+    }
     fetchCart();
   }, []);
 
   const updateQuantity = async (productId, quantity) => {
+    if (quantity < 1 || updating) return;
+    setUpdating(true);
     try {
-      const token = localStorage.getItem("token");
-
-      await api.put(
-        `/cart/update/${productId}`,
-        {
-          quantity,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-
-      window.location.reload();
+      await api.put(`/cart/update/${productId}`, { quantity });
+      await fetchCart(); // refresh state — no full page reload
     } catch (error) {
-      console.log(error);
+      toast.error("Couldn't update quantity");
+    } finally {
+      setUpdating(false);
     }
   };
+
   const removeItem = async (productId) => {
+    if (updating) return;
+    setUpdating(true);
     try {
-      const token = localStorage.getItem("token");
-
-      await api.delete(`/cart/remove/${productId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      window.location.reload();
+      await api.delete(`/cart/remove/${productId}`);
+      await fetchCart();
+      toast.success("Removed from cart");
     } catch (error) {
-      console.log(error);
+      toast.error("Couldn't remove item");
+    } finally {
+      setUpdating(false);
     }
   };
-  const handlePlaceOrder = async () => {
-    try {
-      const token = localStorage.getItem("token");
 
-      await api.post(
-        "/orders/place-order",
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-
-      alert("Order placed successfully");
-    } catch (error) {
-      console.log(error);
-    }
-  };
   const total =
     cart?.items?.reduce(
       (total, item) => total + item.product?.price * item.quantity,
@@ -100,13 +78,20 @@ function Cart() {
         </span>
       </h1>
 
-      {itemCount === 0 ? (
+      {loading ? (
+        <div className="text-muted">Loading…</div>
+      ) : itemCount === 0 ? (
         <div className="wishlist-empty">
           <div className="wishlist-empty-icon">
             <ShoppingBag size={36} strokeWidth={1.6} />
           </div>
           <h2 className="heading mb-8">Your cart is empty</h2>
-          <p className="text-muted">Browse products and add items to your cart.</p>
+          <p className="text-muted mb-24">
+            Browse products and add items to your cart.
+          </p>
+          <button className="btn btn-primary" onClick={() => navigate("/products")}>
+            Start shopping
+          </button>
         </div>
       ) : (
         <div className="cart-layout">
@@ -200,7 +185,7 @@ function Cart() {
             </div>
             <button
               className="btn btn-primary w-full btn-lg mt-16"
-              onClick={handlePlaceOrder}
+              onClick={() => navigate("/checkout")}
             >
               Proceed to Checkout <ArrowRight size={16} />
             </button>

@@ -8,6 +8,7 @@ import {
   User,
   LogOut,
 } from "lucide-react";
+import api from "../api/axios";
 
 const adminNav = [
   { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard", end: true },
@@ -26,7 +27,12 @@ function AdminLayout({ children }) {
     return <Navigate to="/" />;
   }
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      await api.post("/auth/logout");
+    } catch {
+      // Ignore network errors — clear the client session regardless.
+    }
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     window.location.href = "/";

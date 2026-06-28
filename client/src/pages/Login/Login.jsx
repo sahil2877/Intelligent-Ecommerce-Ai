@@ -3,8 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { Sparkles, ArrowRight } from "lucide-react";
 import api from "../../api/axios";
 import { toast } from "react-hot-toast";
+import useDocumentTitle from "../../lib/useDocumentTitle";
 
 function Login() {
+  useDocumentTitle("Sign in · Shopwise AI");
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
@@ -39,16 +41,20 @@ function Login() {
           <div className="auth-logo-mark">
             <Sparkles size={24} strokeWidth={2.2} />
           </div>
-          <div className="auth-title">Welcome back</div>
+          <h1 className="auth-title">Welcome back</h1>
           <div className="auth-subtitle">Sign in to your Shopwise AI account</div>
         </div>
 
         <form className="auth-form" onSubmit={handleLogin}>
           <div className="form-group">
-            <label className="form-label">Email address</label>
+            <label className="form-label" htmlFor="email">Email address</label>
             <input
+              id="email"
+              name="email"
               className="form-input"
               type="email"
+              autoComplete="email"
+              required
               placeholder="you@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -56,10 +62,14 @@ function Login() {
           </div>
 
           <div className="form-group">
-            <label className="form-label">Password</label>
+            <label className="form-label" htmlFor="password">Password</label>
             <input
+              id="password"
+              name="password"
               className="form-input"
               type="password"
+              autoComplete="current-password"
+              required
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

@@ -2,6 +2,20 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
+const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
+
+// Cookie can't be read by JS (httpOnly), is only sent over HTTPS in prod,
+// and uses sameSite "none"+secure for cross-site deploys / "lax" locally.
+const cookieOptions = () => {
+    const isProd = process.env.NODE_ENV === "production";
+    return {
+        httpOnly: true,
+        secure: isProd,
+        sameSite: isProd ? "none" : "lax",
+        maxAge: SEVEN_DAYS_MS,
+    };
+};
+
 const registerUser = async (req, res) => {
     try {
 
@@ -88,6 +102,11 @@ const loginUser = async (req, res) => {
             }
         );
 
+        // Primary auth path: store the JWT in an httpOnly cookie (XSS-safe).
+        res.cookie("token", token, cookieOptions());
+
+        // token is also returned for the bearer-header fallback used by
+        // setups/clients that can't rely on cross-site cookies.
         res.status(200).json({
             success: true,
             token,
@@ -116,8 +135,23 @@ const getProfile = async (req, res) => {
 
 };
 
+const logoutUser = async (req, res) => {
+
+    // Clear the cookie with the same attributes it was set with,
+    // otherwise the browser won't remove it.
+    const { maxAge, ...clearOptions } = cookieOptions();
+    res.clearCookie("token", clearOptions);
+
+    res.status(200).json({
+        success: true,
+        message: "Logged out successfully"
+    });
+
+};
+
 module.exports = {
     registerUser,
     loginUser,
-    getProfile
+    getProfile,
+    logoutUser
 };

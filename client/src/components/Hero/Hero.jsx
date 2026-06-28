@@ -77,7 +77,6 @@ function Hero() {
   const navigate = useNavigate();
   const reduce = useReducedMotion();
   const [[index, dir], setState] = useState([0, 0]);
-  const [paused, setPaused] = useState(false);
   const n = slides.length;
 
   const paginate = useCallback(
@@ -88,12 +87,11 @@ function Hero() {
   );
   const goTo = (i) => setState(([cur]) => [i, i > cur ? 1 : -1]);
 
-  // auto-advance every 5s, paused on hover/focus
+  // auto-advance every 4.5s, looping forever
   useEffect(() => {
-    if (paused) return;
-    const t = setInterval(() => paginate(1), 5000);
+    const t = setInterval(() => paginate(1), 4500);
     return () => clearInterval(t);
-  }, [paused, index, paginate]);
+  }, [index, paginate]);
 
   const slide = slides[index];
 
@@ -105,14 +103,7 @@ function Hero() {
 
   return (
     <section className="hero-section">
-      <div
-        className="hero-carousel"
-        onMouseEnter={() => setPaused(true)}
-        onMouseLeave={() => setPaused(false)}
-        onFocusCapture={() => setPaused(true)}
-        onBlurCapture={() => setPaused(false)}
-        aria-roledescription="carousel"
-      >
+      <div className="hero-carousel" aria-roledescription="carousel">
         <AnimatePresence custom={dir} initial={false}>
           <motion.div
             key={slide.key}

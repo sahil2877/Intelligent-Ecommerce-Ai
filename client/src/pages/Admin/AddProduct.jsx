@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Plus, ArrowRight } from "lucide-react";
+import { toast } from "react-hot-toast";
 import api from "../../api/axios";
 
 function AddProduct() {
@@ -63,9 +64,9 @@ function AddProduct() {
         });
       }
 
-      alert("Product Added");
+      toast.success("Product added");
     } catch (error) {
-      console.log(error);
+      toast.error(error.response?.data?.message || "Failed to add product");
     }
   };
 

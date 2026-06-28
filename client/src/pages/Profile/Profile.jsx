@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { User, LayoutDashboard, Package, Heart, LogOut } from "lucide-react";
 import api from "../../api/axios";
+import useDocumentTitle from "../../lib/useDocumentTitle";
 
 function Profile() {
+  useDocumentTitle("My account · Shopwise AI");
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
@@ -27,7 +29,12 @@ function Profile() {
     }
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      await api.post("/auth/logout");
+    } catch {
+      // Ignore network errors — clear the client session regardless.
+    }
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     window.location.href = "/";
@@ -123,7 +130,7 @@ function Profile() {
             }}
           >
             <div className="flex justify-between items-center mb-24">
-              <div className="heading">Personal Information</div>
+              <h1 className="heading">Personal Information</h1>
             </div>
             <div className="info-grid">
               <div className="form-group">
