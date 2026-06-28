@@ -84,6 +84,12 @@ body::before {
   background-size: 200px 200px;
   opacity: .035; pointer-events: none; mix-blend-mode: overlay;
 }
+/* Touch/mobile GPUs miscomposite this fixed mix-blend-mode layer into a
+   harsh horizontal-banding glitch. The .035 grain is imperceptible on
+   small screens anyway, so drop the overlay there. */
+@media (hover: none), (max-width: 860px) {
+  body::before { display: none; }
+}
 #root { position: relative; z-index: 1; }
 img { display: block; max-width: 100%; }
 a { color: inherit; text-decoration: none; }
