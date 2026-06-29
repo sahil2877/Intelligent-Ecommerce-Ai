@@ -1,7 +1,19 @@
 import axios from "axios";
 
+// Prefer the build-time env var. If it's missing, fall back by hostname so a
+// forgotten VITE_API_URL on the deploy doesn't silently point at localhost.
+const isLocalhost =
+  typeof window !== "undefined" &&
+  ["localhost", "127.0.0.1"].includes(window.location.hostname);
+
+const baseURL =
+  import.meta.env.VITE_API_URL ||
+  (isLocalhost
+    ? "http://localhost:5000/api"
+    : "https://intelligent-ecommerce-ai.onrender.com/api");
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000/api",
+  baseURL,
   withCredentials: true, // send/receive the httpOnly auth cookie
 });
 

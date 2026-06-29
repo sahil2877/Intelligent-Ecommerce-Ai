@@ -9,14 +9,32 @@ const app = express();
 
 // Allow the SPA origin(s) to send/receive the httpOnly auth cookie.
 // CLIENT_URL can be a comma-separated list for multiple deploy targets.
+// Trailing slashes are stripped so "https://app.vercel.app/" and
+// "https://app.vercel.app" are treated as the same origin.
+const normalizeOrigin = (origin) => (origin || "").trim().replace(/\/+$/, "");
+
 const allowedOrigins = (process.env.CLIENT_URL || "http://localhost:5173")
   .split(",")
-  .map((origin) => origin.trim())
+  .map(normalizeOrigin)
   .filter(Boolean);
+
+// Allow any *.vercel.app preview/prod URL as a safety net, so a missing or
+// mismatched CLIENT_URL doesn't silently break login on every redeploy.
+const isAllowedOrigin = (origin) => {
+  const o = normalizeOrigin(origin);
+  return allowedOrigins.includes(o) || /\.vercel\.app$/.test(o);
+};
 
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: (origin, callback) => {
+      // No origin = same-origin / curl / server-to-server: always allow.
+      if (!origin || isAllowedOrigin(origin)) {
+        return callback(null, true);
+      }
+      console.warn(`[CORS] Blocked origin: ${origin}`);
+      return callback(new Error(`Origin ${origin} not allowed by CORS`));
+    },
     credentials: true,
   }),
 );
