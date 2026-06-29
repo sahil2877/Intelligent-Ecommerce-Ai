@@ -4,10 +4,12 @@ import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import api from "../../api/axios";
 import ProductCard from "../ProductCard/ProductCard";
+import ProductCardSkeleton from "../ProductCard/ProductCardSkeleton";
 import { viewportOnce } from "../../lib/motion";
 
 function FeaturedProducts() {
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -17,6 +19,8 @@ function FeaturedProducts() {
         setProducts(res.data.products);
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -46,9 +50,13 @@ function FeaturedProducts() {
         </motion.div>
 
         <div className="grid-4">
-          {products.slice(0, 8).map((product) => (
-            <ProductCard key={product._id} product={product} />
-          ))}
+          {loading
+            ? Array.from({ length: 8 }).map((_, i) => (
+                <ProductCardSkeleton key={i} />
+              ))
+            : products.slice(0, 8).map((product) => (
+                <ProductCard key={product._id} product={product} />
+              ))}
         </div>
       </div>
     </section>

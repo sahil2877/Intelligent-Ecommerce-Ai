@@ -4,12 +4,14 @@ import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { SlidersHorizontal, X, Search } from "lucide-react";
 import api from "../../api/axios";
 import ProductCard from "../../components/ProductCard/ProductCard";
+import ProductCardSkeleton from "../../components/ProductCard/ProductCardSkeleton";
 import useDocumentTitle from "../../lib/useDocumentTitle";
 
 function Products() {
   const location = useLocation();
   const reduce = useReducedMotion();
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const searchQuery = new URLSearchParams(location.search).get("search") || "";
 
   const [search, setSearch] = useState(searchQuery);
@@ -34,6 +36,8 @@ function Products() {
         setProducts(res.data.products);
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchProducts();
@@ -172,7 +176,13 @@ function Products() {
         <div>
           <div className="listing-toolbar">
             <span className="listing-count">
-              Showing <strong>{filtered.length} products</strong>
+              {loading ? (
+                "Loading products…"
+              ) : (
+                <>
+                  Showing <strong>{filtered.length} products</strong>
+                </>
+              )}
             </span>
             <div className="listing-sort">
               <button
@@ -202,7 +212,13 @@ function Products() {
             </div>
           </div>
 
-          {sorted.length === 0 ? (
+          {loading ? (
+            <div className="grid-3">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <ProductCardSkeleton key={i} />
+              ))}
+            </div>
+          ) : sorted.length === 0 ? (
             <div className="wishlist-empty">
               <h2 className="heading mb-8">No products found</h2>
               <p className="text-muted">Try a different search or category.</p>
